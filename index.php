@@ -97,11 +97,11 @@ include("uilang.php");
 				$result = mysqli_query($connection, $sql);
 				if($result){
 					?>
-					<div class="categoryblock" style="border: 1px solid <?php echo $maincolor ?>;padding: 10px; cursor: pointer;"><i class="fa fa-tag"></i> <?php echo uilang("All") ?></div>
+					<div onclick="filtercategory('')" class="categoryblock" style="border: 1px solid <?php echo $maincolor ?>;padding: 10px; cursor: pointer;"><i class="fa fa-tag"></i> <?php echo uilang("All") ?></div>
 					<?php
 					while($row = mysqli_fetch_assoc($result)){
 						?>
-						<div class="categoryblock" style="border: 1px solid <?php echo $maincolor ?>;padding: 10px; cursor: pointer;"><i class="fa fa-tag"></i> <?php echo $row["category"] ?></div>
+						<div onclick="filtercategory('<?php echo $row["category"] ?>')" class="categoryblock" style="border: 1px solid <?php echo $maincolor ?>;padding: 10px; cursor: pointer;"><i class="fa fa-tag"></i> <?php echo $row["category"] ?></div>
 						<?php
 					}
 				}
@@ -178,6 +178,18 @@ include("uilang.php");
 			
 			function hideimagedisplayer(){
 				$("#imagedisplayer").fadeOut()
+			}
+			
+			function filtercategory(catname){
+				if(catname == ""){
+					$(".filmblock").slideDown()
+				}else{
+					$(".filmblock").hide()
+					for(var i = 0; i < $(".filmblock").length; i++){
+						if($(".filmblock").eq(i).find(".categoryname").html() == catname)
+							$(".filmblock").eq(i).slideDown()
+					}
+				}
 			}
 		</script>
 	</body>
