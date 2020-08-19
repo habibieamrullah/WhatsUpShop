@@ -143,8 +143,9 @@ include("uilang.php");
 								}
 								?>
 								
-								<h2 style="margin-top: 20px;"><?php echo shorten_text($row["title"], 25, ' ...', false) ?></h2><div style="padding-bottom: 20px; font-size: 25px; font-weight: bold; color: <?php echo $maincolor ?>"><?php echo $oldprice . $currencysymbol . number_format($saleprice) ?> <span style="font-size: 12px;">x</span> <input type="number" value=1 style="vertical-align: middle; display: inline-block; width: 60px; padding: 5px; margin: 5px;"></div>
-								<a href="<?php echo $baseurl ?>?post=<?php echo $row["postid"] ?>"><div class="morebutton"><i class="fa fa-shopping-cart"></i> <?php echo uilang("Add to Cart") ?></div></a>
+								<h2 style="margin-top: 20px;"><?php echo shorten_text($row["title"], 25, ' ...', false) ?></h2><div class="productoptions" style="display: none"><?php echo $row["options"] ?></div><div style="padding-bottom: 20px; font-size: 25px; font-weight: bold; color: <?php echo $maincolor ?>"><?php echo $oldprice . $currencysymbol . number_format($saleprice) ?> <span style="font-size: 12px;">x</span> <input type="number" value=1 style="vertical-align: middle; display: inline-block; width: 40px; padding: 2px; margin: 5px; border-radius: 0px;"></div>
+								<div class="morebutton"><i class="fa fa-shopping-cart"></i> <?php echo uilang("Add to Cart") ?></div>
+								<div style="padding: 20px;"><a href="#" class="textlink"><?php echo uilang("More") ?>...</a></div>
 							</div>
 						</div>
 						<?php
@@ -191,6 +192,22 @@ include("uilang.php");
 					}
 				}
 			}
+			
+			function showproductoptions(){
+				for(var i = 0; i < $(".filmblock").length; i++){
+					var po = $(".filmblock").eq(i).find(".productoptions").html()
+					if(po != ""){
+						var poobject = JSON.parse(po)
+						var pocontents = ""
+						for(var x = 0; x < poobject[0].options.length; x++){
+							pocontents += "<option value=" +poobject[0].options[x].price+ ">" +poobject[0].options[x].title+ "</option>"
+						}
+						$(".filmblock").eq(i).find(".productoptions").html("<label>" +poobject[0].title+ "</label><select style='padding: 3px; width: 114px; margin: 0 auto;'>" + pocontents + "</select>").show()
+					}
+				}
+			}
+			
+			showproductoptions()
 		</script>
 	</body>
 </html>

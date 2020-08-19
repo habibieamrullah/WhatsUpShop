@@ -298,6 +298,7 @@
 	}
 	
 	.morebutton{
+		cursor: pointer;
 		padding: 20px;
 		border: 1px solid white;
 		transition: background-color .5s;
