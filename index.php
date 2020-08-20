@@ -90,7 +90,7 @@ include("uilang.php");
 					<i class="fa fa-search"></i>
 				</div>
 				<div style="display: table-cell">
-					<input placeholder="<?php echo uilang("Search") ?>..." style="border: none; background-color: inherit; outline: none; margin: 0px;">
+					<input onkeyup="quicksearch()" id="quicksearch" placeholder="<?php echo uilang("Search") ?>..." style="border: none; background-color: inherit; outline: none; margin: 0px;">
 				</div>
 				<div style="display: table-cell; width: 50px; text-align: center;">
 					<i class="fa fa-times-circle"></i>
@@ -200,7 +200,10 @@ include("uilang.php");
 				$("#imagedisplayer").fadeOut()
 			}
 			
+			var currentcategory = ""
+			
 			function filtercategory(catname){
+				currentcategory = catname
 				if(catname == ""){
 					$(".filmblock").fadeIn()
 				}else{
@@ -344,6 +347,18 @@ include("uilang.php");
 					var omuri = encodeURI(ordermessage)
 					location.href = "https://wa.me/<?php echo $adminwhatsapp ?>?text=" + omuri
 				})
+			}
+			
+			function quicksearch(){
+                var keyword = $("#quicksearch").val();
+                keyword = keyword.toLowerCase();
+                if(keyword.length > 0){
+            		for(var i = 0; i < $(".filmblock").length; i++){
+            			if($(".filmblock")[i].innerHTML.toLowerCase().indexOf(keyword) > -1) $(".filmblock")[i].style.display = "inline-block";
+            			else $(".filmblock")[i].style.display = "none";
+            		}
+            	} else $(".filmblock").css({ display : "inline-block" });
+				
 			}
 			
 		</script>
