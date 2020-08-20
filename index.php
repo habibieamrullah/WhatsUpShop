@@ -1,5 +1,10 @@
 <?php
-//Developed by https://webappdev.my.id/
+/*
+Developed by Habibie
+Email: habibieamrullah@gmail.com 
+WhatsApp: 6287880334339
+WebSite: https://webappdev.my.id
+*/
 
 include("config.php");
 include("functions.php");
@@ -115,16 +120,16 @@ include("uilang.php");
 			$result = mysqli_query($connection, $sql);
 			if($result){
 				if(mysqli_num_rows($result) > 0){
+					$productindex = 0;
 					while($row = mysqli_fetch_assoc($result)){
+						
 						$imagefile = $row["picture"];
 						if($imagefile == ""){
 							$imagefile = "images/defaultimg.jpg";
 						}else{
 							$imagefile = "pictures/" . $imagefile;
 						}
-						
 						$currentcategory = showCatName($row["catid"]);
-
 						?>
 						
 						<!-- Thumbnail -->
@@ -132,6 +137,7 @@ include("uilang.php");
 							<div class="categoryname" style="display: none;"><?php echo $currentcategory ?></div>
 							<div class="productthumbnail" onclick="showimage('<?php echo $imagefile ?>')" style="cursor: pointer; background: url(<?php echo $baseurl . $imagefile ?>) no-repeat center center; background-size: cover; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover;">
 							</div>
+							<div class="prodimage" style="display: none;"><?php echo $imagefile ?></div>
 							<div>
 								
 								<?php
@@ -143,12 +149,14 @@ include("uilang.php");
 								}
 								?>
 								
-								<h2 style="margin-top: 20px;"><?php echo shorten_text($row["title"], 25, ' ...', false) ?></h2><div class="productoptions" style="display: none"><?php echo $row["options"] ?></div><div style="padding-bottom: 20px; font-size: 25px; font-weight: bold; color: <?php echo $maincolor ?>"><?php echo $oldprice . $currencysymbol . number_format($saleprice) ?> <span style="font-size: 12px;">x</span> <input type="number" value=1 style="vertical-align: middle; display: inline-block; width: 40px; padding: 2px; margin: 5px; border-radius: 0px;"></div>
-								<div class="morebutton"><i class="fa fa-shopping-cart"></i> <?php echo uilang("Add to Cart") ?></div>
-								<div style="padding: 20px;"><a href="#" class="textlink"><?php echo uilang("More") ?>...</a></div>
+								<h2 style="margin-top: 20px;" class="producttitle"><?php echo shorten_text($row["title"], 25, ' ...', false) ?></h2><div class="productoptions" style="display: none"><?php echo $row["options"] ?></div><div style="padding-bottom: 20px; font-size: 25px; font-weight: bold; color: <?php echo $maincolor ?>"><?php echo $oldprice . $currencysymbol . "<span class='thiscurrentpricedisplay'>" . number_format($saleprice) ?></span><span style="display: none;" class="thiscurrentprice"><?php echo $saleprice ?></span> <span style="font-size: 12px;">x</span> <input class="productquantity" type="number" value=1 min=1 style="vertical-align: middle; display: inline-block; width: 40px; padding: 2px; margin: 5px; border-radius: 0px;"></div>
+								<div class="morebutton" onclick="addtocart(<?php echo $productindex ?>)"><i class="fa fa-shopping-cart"></i> <?php echo uilang("Add to Cart") ?></div>
+								<div style="padding: 20px;"><a onclick="showmore(<?php echo $productindex ?>)" class="textlink whatsmorebutton" style="cursor: pointer; text-decoration: none;"><i class="fa fa-chevron-down"></i> <?php echo uilang("More") ?>...</a><div class="whatsmorecontent" style="display: none; padding: 5px; font-size: 12px;"><?php echo $row["content"] ?></div></div>
 							</div>
 						</div>
 						<?php
+						
+						$productindex = $productindex + 1;
 
 					}
 				}
@@ -158,23 +166,34 @@ include("uilang.php");
 		</div>
 		
 		<div id="cartbutton">
-			<div style="width: 96px; height: 96px; border-radius: 50%; background-color: white; text-align: center; display: table-cell; vertical-align: middle; border: 2px solid <?php echo $maincolor ?>">
-				<i class="fa fa-shopping-cart" style="cursor: pointer;"></i>
+			<div style="width: 96px; height: 96px; border-radius: 50%; background-color: white; text-align: center; display: table-cell; vertical-align: middle; border: 2px solid <?php echo $maincolor ?>; position: relative;">
+				<div style="position: absolute; top: 0; text-align: center; font-size: 20px; left: 0; right: 0; padding: 5px; font-weight: bold;" id="cartcount"></div>
+				<i class="fa fa-shopping-cart" style="cursor: pointer;" onclick="showcartui()"></i>
 			</div>
 		</div>
 		
 		<div id="imagedisplayer" onclick="hideimagedisplayer()"></div>
+		
 		
 		<!-- Footer -->
 		<div class="section footercopyright">
 			<span>© <?php echo date("Y"); ?> <?php echo $websitetitle; ?>. All rights reserved.</span>
 		</div>
 		
+		<div id="cartui">
+			<div style="max-width: 720px; margin: 0 auto;">
+			<h3 onclick='hidecartui()' style='color: lime; cursor: pointer;'><i class='fa fa-arrow-left'></i> Back</h3>
+				<h1><i class='fa fa-shopping-cart'></i> <?php echo uilang("Shopping Cart") ?></h1>
+				<div id="cartdata"></div>
+			</div>
+		</div>
+		
 		
 		
 		<script>
+		
 			function showimage(img){
-				$("#imagedisplayer").html("<img src='<?php echo $baseurl ?>" +img+ "'>").fadeIn()
+				$("#imagedisplayer").html("<img src='<?php echo $baseurl ?>" +img+ "' style='height: 100%;'>").fadeIn()
 			}
 			
 			function hideimagedisplayer(){
@@ -183,12 +202,12 @@ include("uilang.php");
 			
 			function filtercategory(catname){
 				if(catname == ""){
-					$(".filmblock").slideDown()
+					$(".filmblock").fadeIn()
 				}else{
 					$(".filmblock").hide()
 					for(var i = 0; i < $(".filmblock").length; i++){
 						if($(".filmblock").eq(i).find(".categoryname").html() == catname)
-							$(".filmblock").eq(i).slideDown()
+							$(".filmblock").eq(i).fadeIn()
 					}
 				}
 			}
@@ -200,14 +219,133 @@ include("uilang.php");
 						var poobject = JSON.parse(po)
 						var pocontents = ""
 						for(var x = 0; x < poobject[0].options.length; x++){
-							pocontents += "<option value=" +poobject[0].options[x].price+ ">" +poobject[0].options[x].title+ "</option>"
+							if(x == 0){
+								var selectedprice = poobject[0].options[x].price
+								$(".thiscurrentprice").eq(i).html(selectedprice)
+								selectedprice = parseInt(selectedprice)
+								$(".thiscurrentpricedisplay").eq(i).html(tSep(selectedprice.toFixed(2)))
+							}
+							pocontents += "<option value=" +poobject[0].options[x].price + ">" +poobject[0].options[x].title+ "</option>"
 						}
-						$(".filmblock").eq(i).find(".productoptions").html("<label>" +poobject[0].title+ "</label><select style='padding: 3px; width: 114px; margin: 0 auto;'>" + pocontents + "</select>").show()
+						$(".filmblock").eq(i).find(".productoptions").html("<label class='poptionname'>" +poobject[0].title+ "</label><select onchange='overrideprice("+i+")' class='currentproductoption"+i+"' style='padding: 3px; width: 114px; margin: 0 auto;'>" + pocontents + "</select>").show()
 					}
 				}
 			}
 			
 			showproductoptions()
+			
+			function showmore(n){
+				$(".whatsmorecontent").eq(n).slideToggle()
+			}
+			
+			function overrideprice(n){
+				var selectedprice = $(".currentproductoption"+n+" option:selected").val()
+				$(".thiscurrentprice").eq(n).html($(".currentproductoption"+n+" option:selected").val())
+				selectedprice = parseInt(selectedprice)
+				$(".thiscurrentpricedisplay").eq(n).html(tSep(selectedprice.toFixed(2)))
+			}
+			
+			var cartobject = []
+			
+			function addtocart(n){
+				
+				$("#cartbutton").fadeOut(100, function(){
+					$("#cartbutton").fadeIn()
+				})
+				
+				var prod = $(".filmblock").eq(n)
+				var prodop = prod.find(".currentproductoption"+n+" option:selected").text()
+				if(prodop != "")
+					prodop = " - " + prodop
+				var prodtitle = prod.find(".producttitle").text() + prodop
+				var prodprice = parseInt(prod.find(".thiscurrentprice").text())
+				var prodquantity = parseInt(prod.find(".productquantity").val())
+				var prodimage = prod.find(".prodimage").eq(0).text()
+				
+				function pushit(){
+					cartobject.push({
+						id : n,
+						title : prodtitle,
+						price : prodprice,
+						quantity : prodquantity,
+						image : prodimage,
+					})
+					$("#cartcount").html(cartobject.length)
+				}
+				
+				if(cartobject.length == 0){
+					pushit()
+				}else{
+					for(var i = 0; i < cartobject.length; i++){
+						if(cartobject[i].title == prodtitle && cartobject[i].price == prodprice){
+							cartobject[i].quantity += prodquantity
+							return
+						}
+					}
+					pushit()
+					return
+				}				
+				
+			}
+			
+			var ordermessage = ""
+			
+			function showcartui(){
+				ordermessage = "ORDER ID:" + Math.floor(Math.random() * 9999) + 1000 + "\n"
+				var cartdata = ""
+				var grandtotal = 0
+				for(var i = 0; i < cartobject.length; i++){
+					var tmpttl = cartobject[i].price * cartobject[i].quantity
+					cartdata += "<div style='margin-bottom: 20px;'><img src='<?php echo $baseurl ?>"+cartobject[i].image+"' style='display: inline-block; vertical-align: middle; max-width: 64px; border-radius: 10px;'> "+cartobject[i].title + " <?php echo $currencysymbol ?>" + tSep(parseInt(cartobject[i].price).toFixed(2)) + " x <input id='cartq"+i+"' onchange='modifycq("+i+")' class='productquantity' type='number' value=" + cartobject[i].quantity + " min=1 style='vertical-align: middle; display: inline-block; width: 40px; padding: 2px; margin: 5px; border-radius: 0px;'> = <?php echo $currencysymbol ?>" + tSep(tmpttl.toFixed(2)) + "</div>"
+					grandtotal += tmpttl
+					
+					ordermessage += cartobject[i].title + " x " + cartobject[i].quantity + " = " + tmpttl + "\n"
+				}
+				
+				ordermessage += "<?php echo uilang("Total") ?> = " + grandtotal + "\n"
+				
+				cartdata += "<hr style='background-color: white;'><h1><?php echo uilang("Total") ?> = <?php echo $currencysymbol ?>" + tSep(grandtotal.toFixed(2)) + "</h1>"
+				cartdata += "<h3><?php echo uilang("Contact Information") ?></h3><label><?php echo uilang("Name") ?></label><input id='cdname' placeholder='<?php echo uilang("Name") ?>'>"
+				cartdata += "<label><?php echo uilang("Mobile") ?></label><input id='cdmobile' placeholder='<?php echo uilang("Mobile") ?>'>"
+				cartdata += "<label><?php echo uilang("Address") ?></label><input id='cdaddress' placeholder='<?php echo uilang("Address") ?>'>"
+				cartdata += "<label><?php echo uilang("Delivery Method") ?></label><select id='cdmethod'><?php echo uilang("Delivery Method") ?><option>Take Away</option><option>Home Delivery</option><option>Dining</option></select>"
+				cartdata += "<div style='text-align: center;'><div class='buybutton' onclick='hidecartui()'><i class='fa fa-arrow-left'></i> Back to Shop</div><div class='buybutton' onclick='clearcart()'><i class='fa fa-times'></i> Clear Cart</div><div class='buybutton' onclick='chatnow()'><i class='fa fa-whatsapp'></i> Order on WhatsApp</div></div>"
+				$("#cartdata").html(cartdata)
+				$("#cartui").fadeIn()
+				
+			}
+			
+			function hidecartui(){
+				
+				$("#cartui").fadeOut()
+				
+			}
+			
+			function clearcart(){
+				cartobject = []
+				showcartui()
+			}
+			
+			function modifycq(n){
+				var newvalue = parseInt($("#cartq"+n).val())
+				cartobject[n].quantity = newvalue
+				showcartui()
+			}
+			
+			function chatnow(){
+				var cdname = $("#cdname").val()
+				var cdmobile = $("#cdmobile").val()
+				var cdaddress = $("#cdaddress").val()
+				var cdmethod = $("#cdmethod").val()
+				ordermessage += cdname + "\n" + cdmobile + "\n" + cdaddress + "\n" + cdmethod + "\n" 
+				$.post("<?php echo $baseurl ?>ordernotes.php", {
+					"message" : ordermessage
+				}, function(data){
+					var omuri = encodeURI(ordermessage)
+					location.href = "https://wa.me/<?php echo $adminwhatsapp ?>?text=" + omuri
+				})
+			}
+			
 		</script>
 	</body>
 </html>

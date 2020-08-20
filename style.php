@@ -110,6 +110,22 @@
 		margin-top: 30px;
 	}
 	
+	#cartui{
+		z-index: 130;
+		background-color: rgba(0,0,0,.8);
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		display: none;
+		position: fixed;
+		padding: 50px;
+		color: white;
+		overflow: auto;
+		backdrop-filter: blur(15px);
+		-webkit-backdrop-filter: blur(15px);
+	}
+	
 	.alert{
 		background-color: green; 
 		color: white;
@@ -353,6 +369,7 @@
 		text-align: center;
 		border: 2px solid white;
 		transition: box-shadow .5s;
+		width: 300px;
 	}
 	
 	.filmblock:hover{

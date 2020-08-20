@@ -1,5 +1,10 @@
 <?php
-//Developed by https://webappdev.my.id/
+/*
+Developed by Habibie
+Email: habibieamrullah@gmail.com 
+WhatsApp: 6287880334339
+WebSite: https://webappdev.my.id
+*/
 
 /*
 Step 1 : Create a database, and take a note of your database name

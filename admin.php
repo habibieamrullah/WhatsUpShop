@@ -1,5 +1,10 @@
 <?php
-//Developed by https://webappdev.my.id/
+/*
+Developed by Habibie
+Email: habibieamrullah@gmail.com 
+WhatsApp: 6287880334339
+WebSite: https://webappdev.my.id
+*/
 
 session_start();
 include("config.php");

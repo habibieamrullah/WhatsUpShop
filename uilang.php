@@ -1,4 +1,10 @@
 <?php
+/*
+Developed by Habibie
+Email: habibieamrullah@gmail.com 
+WhatsApp: 6287880334339
+WebSite: https://webappdev.my.id
+*/
     
     //Bahasa Indonesia
     function translateId(){
@@ -12,6 +18,8 @@
 			"Add new option title:" => "Tambah judul opsi baru",
 			"Add to Cart" => "Tambah ke Keranjang",
 			"Add" => "Tambah",
+			"Delivery Method" => "Metode Pengiriman",
+			"Address" => "Alamat",
 			"Admin WhatsApp Phone Number" => "Nomor hape Admin dengan WhatsApp aktif",
 			"All" => "Semua",
 			"Back" => "Kembali",
