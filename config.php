@@ -53,7 +53,7 @@ title VARCHAR(300) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 time VARCHAR(150) NOT NULL,
 options VARCHAR(200) NOT NULL,
 picture VARCHAR(150) NOT NULL,
-content VARCHAR(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+content TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
 )");
 
 //Creating tables - categories
