@@ -8,7 +8,11 @@ if(isset($_POST["newposttitle"])){
 	$newpostcontent = mysqli_real_escape_string($connection, $_POST["newpostcontent"]);
 	$catid = mysqli_real_escape_string($connection, $_POST["catid"]);
 	$normalprice = mysqli_real_escape_string($connection, $_POST["newpostnormalprice"]);
+	if($normalprice == "")
+		$normalprice = 0;
 	$discountprice = mysqli_real_escape_string($connection, $_POST["newpostdiscountprice"]);
+	if($discountprice == "")
+		$discountprice = 0;
 	$moreoptions = mysqli_real_escape_string($connection, $_POST["moreoptions"]);
 	$currenttime = round(microtime(true) * 1000);
 	if($newposttitle != "" && $newpostcontent != ""){
