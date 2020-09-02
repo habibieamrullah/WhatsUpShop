@@ -92,7 +92,7 @@ include("uilang.php");
 				<div style="display: table-cell">
 					<input onkeyup="quicksearch()" id="quicksearch" placeholder="<?php echo uilang("Search") ?>..." style="border: none; background-color: inherit; outline: none; margin: 0px;">
 				</div>
-				<div style="display: table-cell; width: 50px; text-align: center;">
+				<div style="display: table-cell; width: 50px; text-align: center;" onclick="clearSearchInput()">
 					<i class="fa fa-times-circle"></i>
 				</div>
 			</div>
@@ -135,8 +135,14 @@ include("uilang.php");
 						<!-- Thumbnail -->
 						<div class="filmblock">
 							<div class="categoryname" style="display: none;"><?php echo $currentcategory ?></div>
+							
+							<div class="productthumbnail" onclick="showimage('<?php echo $imagefile ?>')" style="cursor: pointer; background-image: url(<?php echo $baseurl . $imagefile ?>); background-attachment: fill; background-position: center; background-repeat: no-repeat; background-size: auto 100%;"></div>
+						
+							<!--
 							<div class="productthumbnail" onclick="showimage('<?php echo $imagefile ?>')" style="cursor: pointer; background: url(<?php echo $baseurl . $imagefile ?>) no-repeat center center; background-size: cover; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover;">
 							</div>
+							-->
+							
 							<div class="prodimage" style="display: none;"><?php echo $imagefile ?></div>
 							<div>
 								
@@ -359,6 +365,11 @@ include("uilang.php");
             		}
             	} else $(".filmblock").css({ display : "inline-block" });
 				
+			}
+			
+			function clearSearchInput(){
+				$("#quicksearch").val("")
+				quicksearch()
 			}
 			
 		</script>
