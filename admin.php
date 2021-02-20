@@ -25,10 +25,7 @@ include("uilang.php");
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<link rel="shortcut icon" href="<?php echo $baseurl ?>favicon.ico" type="image/x-icon">
 		<link rel="icon" href="<?php echo $baseurl ?>favicon.ico" type="image/x-icon">
-		<script
-          src="https://code.jquery.com/jquery-3.4.1.min.js"
-          integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-          crossorigin="anonymous"></script>
+		<script src="jquery.min.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300&display=swap" rel="stylesheet">
 		
 		<link rel="stylesheet" type="text/css" href="<?php echo $baseurl ?>assets/css/font-awesome.css">
@@ -56,11 +53,7 @@ include("uilang.php");
 				color: black;
 				transition: background-color .5s;
 			}
-			.stickythingy{
-				position: -webkit-sticky; /* Safari */
-				position: sticky;
-				top: 0;
-			}
+			
 			.bar{
 				background-color: <?php echo $maincolor ?>; 
 				display: block;
@@ -71,6 +64,7 @@ include("uilang.php");
 		</style>
 	</head>
 	<body>
+		<div class="barsbutton" onclick="toggleadminmenu()"><i class="fa fa-bars"></i></div>
 		<?php
 		//if admin logged in
 		if(isset($_SESSION["adminusername"]) && isset($_SESSION["adminpassword"])){
@@ -79,24 +73,26 @@ include("uilang.php");
 				
 				<div style="display: table; position: absolute; top: 0; bottom: 0; left: 0; right: 0; width: 100%; height: 100%;">
 					<div style="display: table-row; height: 100%;">
-						<div style="display: table-cell; width: 140px; background-color: black; color: white;">
+						<div class="adminmenubar">
 							<div class="stickythingy">
 								<div style="padding: 40px;">
 									<?php
 									$currentlogo = "images/logo.png";
-									if($logo != "")
+									if($logo != ""){
 										$currentlogo = "pictures/" . $logo;
+									}
 									?>
 									<a href="<?php echo $baseurl ?>admin.php"><img src="<?php echo $currentlogo ?>" style="display: border-box; width: 100%;"></a>
 								</div>
 								<a href="<?php echo $baseurl ?>admin.php"><div class="adminleftbaritem"><i class="fa fa-home" style="width: 30px;"></i> <?php echo uilang("Home") ?></div></a>
 								<a href="<?php echo $baseurl ?>admin.php?newpost"><div class="adminleftbaritem"><i class="fa fa-plus" style="width: 30px;"></i> <?php echo uilang("New Post") ?></div></a>
+								<a href="<?php echo $baseurl ?>admin.php?pictures"><div class="adminleftbaritem"><i class="fa fa-image" style="width: 30px;"></i> <?php echo uilang("Pictures") ?></div></a>
 								<a href="<?php echo $baseurl ?>admin.php?categories"><div class="adminleftbaritem"><i class="fa fa-tag" style="width: 30px;"></i> <?php echo uilang("Categories") ?></div></a>
 								<a href="<?php echo $baseurl ?>admin.php?orders"><div class="adminleftbaritem"><i class="fa fa-file-text" style="width: 30px;"></i> <?php echo uilang("Orders") ?></div></a>
 								<a href="<?php echo $baseurl ?>admin.php?settings"><div class="adminleftbaritem"><i class="fa fa-cogs" style="width: 30px;"></i> <?php echo uilang("Settings") ?></div></a>
 								<a href="<?php echo $baseurl ?>admin.php?logout"><div class="adminleftbaritem"><i class="fa fa-sign-out" style="width: 30px;"></i> <?php echo uilang("Logout") ?></div></a>
 								
-								<div style="text-align: center; padding: 30px; font-size: 10px;">CMS <?php echo uilang("Developed by") ?> <a target="_blank" class="textlink" style="color: lime;" href="https://webappdev.my.id/">https://webappdev.my.id/</a></div>
+								<div style="text-align: center; padding: 30px; font-size: 10px;"><?php echo uilang("Developed by") ?><br><a target="_blank" class="textlink" style="color: lime;" href="https://webappdev.my.id/">https://webappdev.my.id/</a><br><br>Donate to the author:<br><a href="https://www.paypal.me/habibieamrullah" class="textlink" style="color: lime;">https://www.paypal.me/habibieamrullah</a></div>
 							</div>
 						</div>
 						<div style="display: table-cell; padding: 25px; vertical-align: top; border-left: 1px solid <?php echo $maincolor ?>; ">
@@ -110,9 +106,9 @@ include("uilang.php");
 										<label><i class="fa fa-edit"></i> <?php echo uilang("Title") ?></label>
 										<input name="newposttitle" placeholder="<?php echo uilang("Title") ?>">
 										<label><i class="fa fa-money"></i> <?php echo uilang("Price") ?></label>
-										<input type="number" name="newpostnormalprice" placeholder="<?php echo uilang("Price") ?>">
+										<input type="number" step="0.01" name="newpostnormalprice" placeholder="<?php echo uilang("Price") ?>">
 										<label><i class="fa fa-money"></i> <?php echo uilang("Discount Price") ?></label>
-										<input type="number" name="newpostdiscountprice" placeholder="<?php echo uilang("Discount Price") ?>">
+										<input type="number" step="0.01" name="newpostdiscountprice" placeholder="<?php echo uilang("Discount Price") ?>">
 										<label><i class="fa fa-tag"></i> <?php echo uilang("Category") ?></label>
 										<select name="catid">
 											<?php
@@ -131,8 +127,15 @@ include("uilang.php");
 										<label><i class="fa fa-file"></i> <?php echo uilang("Content") ?></label>
 										<textarea name="newpostcontent" style="height: 250px;"></textarea>
 										<br><br>
+										
 										<label><i class="fa fa-image"></i> <?php echo uilang("Image File") ?></label>
 										<input class="fileinput" name="newpicture" type="file" accept="image/jpeg, image/png">
+										
+										<label><i class="fa fa-image"></i> <?php echo uilang("Additional Images") ?></label>
+										<div id="moreimagesvisual"></div>
+										<input id="moreimagesinput" name="moreimagesinput" style="display: none;">
+										<div class="buybutton" onclick="showimagepicker()"><i class="fa fa-plus"></i> <?php echo uilang("Add") ?></div>
+										<br><br>
 										
 										<label><i class="fa fa-check-square-o"></i> <?php echo uilang("Add more options") ?></label>
 										<input id="moreoptions" name="moreoptions" style="display: none">
@@ -202,6 +205,86 @@ include("uilang.php");
 								<?php
 							
 							}
+							//pictures
+							else if(isset($_GET["pictures"])){
+								?>
+								<h1><?php echo uilang("Pictures") ?></h1>
+								<?php
+								
+								if(isset($_GET["delete"])){
+									if(file_exists("pictures/" . $_GET["delete"])){
+										unlink("pictures/" . $_GET["delete"]);
+										echo "<div class='alert'>" . uilang("A picture has been deleted.") . "</div>";
+									}
+								}
+								
+								if(isset($_POST["submitmorepictures"])){
+									
+									include("thumbnailgenerator.php");
+									
+									$files = array_filter($_FILES['newmorepicture']['name']);
+									$total = count($files);
+									
+									$hasfile = false;
+
+									// Loop through each file
+									for( $i=0 ; $i < $total ; $i++ ) {
+
+										//Get the temp file path
+										$tmpFilePath = $_FILES['newmorepicture']['tmp_name'][$i];
+
+										//Make sure we have a file path
+										if ($tmpFilePath != ""){
+										  
+										  
+											$maxsize = 524288;
+											
+											$extsAllowed = array( 'jpg', 'jpeg', 'png' );
+											$uploadedfile = $_FILES['newmorepicture']['name'][$i];
+											$extension = pathinfo($uploadedfile, PATHINFO_EXTENSION);
+											if (in_array($extension, $extsAllowed) ) { 
+												$newpicture = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyz", 5)), 0, 10);
+												$name = "pictures/" . $newpicture .".". $extension;
+												
+												if(($_FILES['newmorepicture']['size'][$i] >= $maxsize)){
+													createThumbnail($_FILES['newmorepicture']['tmp_name'][$i], "pictures/" . $newpicture .".". $extension, 512);
+												}else{
+													$result = move_uploaded_file($_FILES['newmorepicture']['tmp_name'][$i], $name);
+												}
+												
+												$hasfile = true;
+											}
+										}
+									}
+									if($hasfile)
+										echo "<div class='alert'>" . uilang("More picture(s) has been added.") . "</div>";
+								}
+								
+								
+								$dirpath = "pictures/*";
+								$files = array();
+								$files = glob($dirpath);
+								usort($files, function($x, $y) {
+									return filemtime($x) < filemtime($y);
+								});
+								
+								foreach($files as $item){
+									echo "<div style='display: inline-block; vertical-align: top; text-align: center;'>";
+									echo "<div><img src='" .$baseurl. "/" . $item . "' height='128px' style='margin: 5px; border-radius: 5px; cursor: pointer;' onclick=showimage('" . $item . "')></div>";
+									echo "<a class='textlink' href='?pictures&delete=" . explode("/", $item)[1] . "'><i class='fa fa-trash'></i> " . uilang("Delete") . "</a></div>";
+								}
+								
+								?>
+								<div style="margin-top: 50px">
+									<form method="post" enctype="multipart/form-data">
+										<label><i class="fa fa-image"></i> <?php echo uilang("Add more picture") ?></label>
+										<input class="fileinput" name="newmorepicture[]" type="file" accept="image/jpeg, image/png" multiple="multiple">
+										<input name = "submitmorepictures" type="submit" value="<?php echo uilang("Submit") ?>" class="submitbutton">
+									</form>
+								</div>
+								<?php
+								
+							}
 							//categories
 							else if(isset($_GET["categories"])){
 								?>
@@ -266,8 +349,8 @@ include("uilang.php");
 									</form>
 									<?php
 								}
-
 							}
+							
 							//settings
 							else if(isset($_GET["settings"])){
 								?>
@@ -284,23 +367,19 @@ include("uilang.php");
 								
 								if(isset($_POST["websitetitle"])){
 									
-									$websitetitle = mysqli_real_escape_string($connection, $_POST["websitetitle"]);
-									$maincolor = mysqli_real_escape_string($connection, $_POST["maincolor"]);
-									$secondcolor = mysqli_real_escape_string($connection, $_POST["secondcolor"]);
-									$about = mysqli_real_escape_string($connection, $_POST["about"]);
-									$adminwhatsapp = mysqli_real_escape_string($connection, $_POST["adminwhatsapp"]);
-									$language = mysqli_real_escape_string($connection, $_POST["language"]);
-									$currencysymbol = mysqli_real_escape_string($connection, $_POST["currencysymbol"]);
-									$baseurl = mysqli_real_escape_string($connection, $_POST["baseurl"]);
+									$cfg = new \stdClass();
+									$cfg->websitetitle = mysqli_real_escape_string($connection, $_POST["websitetitle"]);
+									$cfg->maincolor = mysqli_real_escape_string($connection, $_POST["maincolor"]);
+									$cfg->secondcolor = mysqli_real_escape_string($connection, $_POST["secondcolor"]);
+									$cfg->about = $_POST["about"];
+									$cfg->language = mysqli_real_escape_string($connection, $_POST["language"]);
+									$cfg->logo = $logo;
+									$cfg->adminwhatsapp = mysqli_real_escape_string($connection, $_POST["adminwhatsapp"]);
+									$cfg->currencysymbol = mysqli_real_escape_string($connection, $_POST["currencysymbol"]);
+									$cfg->baseurl = mysqli_real_escape_string($connection, $_POST["baseurl"]);
+									$JSONcfg = addslashes(json_encode($cfg));
 									
-									mysqli_query($connection, "UPDATE $tableconfig SET value = '$websitetitle' WHERE config = 'websitetitle'");
-									mysqli_query($connection, "UPDATE $tableconfig SET value = '$maincolor' WHERE config = 'maincolor'");
-									mysqli_query($connection, "UPDATE $tableconfig SET value = '$secondcolor' WHERE config = 'secondcolor'");
-									mysqli_query($connection, "UPDATE $tableconfig SET value = '$about' WHERE config = 'about'");
-									mysqli_query($connection, "UPDATE $tableconfig SET value = '$adminwhatsapp' WHERE config = 'adminwhatsapp'");
-									mysqli_query($connection, "UPDATE $tableconfig SET value = '$language' WHERE config = 'language'");
-									mysqli_query($connection, "UPDATE $tableconfig SET value = '$currencysymbol' WHERE config = 'currencysymbol'");
-									mysqli_query($connection, "UPDATE $tableconfig SET value = '$baseurl' WHERE config = 'baseurl'");
+									mysqli_query($connection, "UPDATE $tableconfig SET value = '$JSONcfg' WHERE config = 'cfg'");
 									
 									//Favicon upload
 									if(isset($_FILES["favicon"])){
@@ -322,7 +401,7 @@ include("uilang.php");
 										}
 									}
 									
-									//Picture upload
+									//Logo upload
 									if(isset($_FILES["newpicture"])){
 										$maxsize = 524288;
 										if($_FILES["newpicture"]["size"] == 0){
@@ -342,120 +421,118 @@ include("uilang.php");
 													$result = move_uploaded_file($_FILES['newpicture']['tmp_name'], $name);
 												}
 												?>
+												
 												<div class="alert"><?php echo uilang("Logo upload is OK") ?>.</div>
 												<?php
 												$newpicture = $newpicture .".". $extension;
+												
+												/*
+												if($logo != ""){
+													//delete previous media
+													if(file_exists("pictures/" . $logo)){
+														unlink("pictures/" . $logo);
+													}
+												}
+												*/
+												
 												$logo = $newpicture;
-												mysqli_query($connection, "UPDATE $tableconfig SET value = '$logo' WHERE config = 'logo'");
+												
+												$sql = "SELECT * FROM $tableconfig WHERE config = 'cfg'";
+												$result = mysqli_query($connection, $sql);
+												$row = mysqli_fetch_assoc($result)["value"];
+												$cfg = json_decode($row);
+												
+												$cfg->logo = $logo;
+												$JSONcfg = json_encode($cfg);
+												
+												mysqli_query($connection, "UPDATE $tableconfig SET value = '$JSONcfg' WHERE config = 'cfg'");
 												
 											} else { echo "<div class='alert'>" .uilang("File is not valid. Please try again"). ".</div>"; }
 										}
 									}
-									
 									echo "<div class='alert'>" .uilang("Settings updated!"). "</div>";
 								}
+								
 								?>
 								<form method="post" enctype="multipart/form-data">
-								<?php
-								$sql = "SELECT * FROM $tableconfig";
-								$result = mysqli_query($connection, $sql);
-								while($row = mysqli_fetch_assoc($result)){
-									switch($row["config"]){
-										case "websitetitle" :
+								
+									<?php
+									
+									$sql = "SELECT * FROM $tableconfig WHERE config = 'cfg'";
+									$result = mysqli_query($connection, $sql);
+									
+									$row = mysqli_fetch_assoc($result)["value"];
+									$cfg = json_decode($row);
+									
+									?>
+									
+									<label><i class="fa fa-font"></i> <?php echo uilang("Website Title") ?></label>
+									<input placeholder="<?php echo uilang("Website Title") ?>" name="websitetitle" value="<?php echo stripslashes($cfg->websitetitle) ?>">
+									
+									<label><i class="fa fa-paint-brush"></i> <?php echo uilang("Main Color") ?></label>
+									<input placeholder="<?php echo uilang("Main Color") ?>" name="maincolor" value="<?php echo $cfg->maincolor ?>" data-jscolor="">
+									
+									<label><i class="fa fa-paint-brush"></i> <?php echo uilang("Secondary Color") ?></label>
+									<input placeholder="<?php echo uilang("Secondary Color") ?>" name="secondcolor" value="<?php echo $cfg->secondcolor ?>" data-jscolor="">
+									
+									<label><i class="fa fa-money"></i> <?php echo uilang("Currency Symbol") ?></label>
+									<input placeholder="<?php echo uilang("Currency Symbol") ?>" name="currencysymbol" value="<?php echo $currencysymbol ?>">
+												
+									<label><i class="fa fa-whatsapp"></i> <?php echo uilang("Admin WhatsApp Phone Number") ?></label>
+									<input placeholder="<?php echo uilang("Admin WhatsApp Phone Number") ?>" name="adminwhatsapp" value="<?php echo $cfg->adminwhatsapp ?>">
+									
+									<label><i class="fa fa-info"></i> <?php echo uilang("About") ?></label>
+									<textarea placeholder="<?php echo uilang("About") ?>" name="about"><?php echo stripslashes($cfg->about) ?></textarea>
+									<br>
+									
+									<label><i class="fa fa-language"></i> <?php echo uilang("Language") ?></label>
+									<select name="language">
+										<?php
+										if($cfg->language == "en"){
 											?>
-											<label><i class="fa fa-font"></i> <?php echo uilang("Website Title") ?></label>
-											<input placeholder="<?php echo uilang("Website Title") ?>" name="websitetitle" value="<?php echo $row["value"] ?>">
+											<option selected value="en">English</option>
+											<option value="id">Bahasa Indonesia</option>
 											<?php
-											break;
-										case "maincolor" :
+										}else if($cfg->language == "id"){
 											?>
-											<label><i class="fa fa-paint-brush"></i> <?php echo uilang("Main Color") ?></label>
-											<input placeholder="<?php echo uilang("Main Color") ?>" name="maincolor" value="<?php echo $row["value"] ?>" data-jscolor="">
+											<option value="en">English</option>
+											<option selected value="id">Bahasa Indonesia</option>
 											<?php
-											break;
-										case "secondcolor" :
-											?>
-											<label><i class="fa fa-paint-brush"></i> <?php echo uilang("Secondary Color") ?></label>
-											<input placeholder="<?php echo uilang("Secondary Color") ?>" name="secondcolor" value="<?php echo $row["value"] ?>" data-jscolor="">
-											<?php
-											break;
-										case "currencysymbol" :
-											?>
-											<label><i class="fa fa-money"></i> <?php echo uilang("Currency Symbol") ?></label>
-											<input placeholder="<?php echo uilang("Currency Symbol") ?>" name="currencysymbol" value="<?php echo $row["value"] ?>">
-											<?php
-											break;
-										case "adminwhatsapp" :
-											?>
-											<label><i class="fa fa-whatsapp"></i> <?php echo uilang("Admin WhatsApp Phone Number") ?></label>
-											<input placeholder="<?php echo uilang("Admin WhatsApp Phone Number") ?>" name="adminwhatsapp" value="<?php echo $row["value"] ?>">
-											<?php
-											break;
-										case "about" :
-											?>
-											<label><i class="fa fa-info"></i> <?php echo uilang("About") ?></label>
-											<textarea placeholder="<?php echo uilang("About") ?>" name="about"><?php echo $row["value"] ?></textarea>
-											<br>
-											<?php
-											break;
-										case "language" :
-											?>
-											<label><i class="fa fa-language"></i> <?php echo uilang("Language") ?></label>
-											<select name="language">
-												<?php
-												if($row["value"] == "en"){
-													?>
-													<option selected value="en">English</option>
-													<option value="id">Bahasa Indonesia</option>
-													<?php
-												}else if($row["value"] == "id"){
-													?>
-													<option value="en">English</option>
-													<option selected value="id">Bahasa Indonesia</option>
-													<?php
-												}
-												?>
-											</select>
-											<br>
-											<?php
-											break;
-										case "logo" :
-											?>
-											<label><i class="fa fa-check-circle"></i> Logo</label>
-											<?php
-											if($row["value"] == ""){
-												?>
-												<div style="display: inline-block; vertical-align: middle;">
-													<img src="images/logo.png" width="64">
-												</div>
-												<?php
-											}else{
-												?>
-												<div style="display: inline-block; text-align: center; vertical-align: middle;">
-													<img src="pictures/<?php echo $row["value"] ?>" width="64"><br>
-													<a href="<?php echo $baseurl ?>admin.php?settings&removelogo" class="textlink"><i class="fa fa-trash"></i> Remove</a>
-												</div>
-												<?php
-											}
-											?>
-											<input name="newpicture" type="file" name="logo" style="display: inline-block; width: 300px; vertical-align: middle;">
-											<br>
-											<?php
-											break;
-										case "baseurl" :
-											?>
-											<label><i class="fa fa-link"></i> <?php echo uilang("Base URL (make sure to include '/' symbol at the end)") ?></label>
-											<input placeholder="<?php echo uilang("Base URL") ?>" name="baseurl" value="<?php echo $row["value"] ?>">
-											<?php
-											break;
+										}
+										?>
+									</select>
+									<br>
+									
+									<label><i class="fa fa-check-circle"></i> Logo</label>
+									<?php
+									if($cfg->logo == ""){
+										?>
+										<div style="display: inline-block; vertical-align: middle;">
+											<img src="images/logo.png" width="64">
+										</div>
+										<?php
+									}else{
+										?>
+										<div style="display: inline-block; text-align: center; vertical-align: middle;">
+											<img src="pictures/<?php echo $cfg->logo ?>" width="64"><br>
+											<a href="<?php echo $baseurl ?>admin.php?settings&removelogo" class="textlink"><i class="fa fa-trash"></i> Remove</a>
+										</div>
+										<?php
 									}
-								}
-								?>
-								<label><i class="fa fa-globe"></i> <?php echo uilang("Website Icon (.ico file)") ?></label>
-								<input type="file" name="favicon">
-								<input class="submitbutton" type="submit" value="<?php echo uilang("Update") ?>">
+									?>
+									<input name="newpicture" type="file" name="logo" style="display: inline-block; width: 300px; vertical-align: middle;">
+									<br>
+									
+									<label><i class="fa fa-link"></i> <?php echo uilang("Base URL (make sure to include '/' symbol at the end)") ?></label>
+									<input placeholder="<?php echo uilang("Base URL") ?>" name="baseurl" value="<?php echo $cfg->baseurl ?>">
+												
+									<label><i class="fa fa-globe"></i> <?php echo uilang("Website Icon (.ico file)") ?></label>
+									<input type="file" name="favicon">
+									<input class="submitbutton" type="submit" value="<?php echo uilang("Update") ?>">
 								</form>
+								
 								<?php
+								
 							}
 							//edit post
 							else if(isset($_GET["editpost"])){
@@ -474,9 +551,9 @@ include("uilang.php");
 											<label><i class="fa fa-edit"></i> <?php echo uilang("Title") ?></label>
 											<input name="editposttitle" placeholder="<?php echo uilang("Title") ?>" value="<?php echo $row["title"] ?>">
 											<label><i class="fa fa-money"></i> <?php echo uilang("Price") ?></label>
-											<input type="number" name="editnormalprice" placeholder="<?php echo uilang("Price") ?>" value="<?php echo $row["normalprice"] ?>">
+											<input type="number" step="0.01" name="editnormalprice" placeholder="<?php echo uilang("Price") ?>" value="<?php echo $row["normalprice"] ?>">
 											<label><i class="fa fa-money"></i> <?php echo uilang("Discount Price") ?></label>
-											<input type="number" name="editdiscountprice" placeholder="<?php echo uilang("Discount Price") ?>" value="<?php echo $row["discountprice"] ?>">
+											<input type="number" step="0.01" name="editdiscountprice" placeholder="<?php echo uilang("Discount Price") ?>" value="<?php echo $row["discountprice"] ?>">
 											<label><i class="fa fa-tag"></i> <?php echo uilang("Category") ?></label>
 											
 											<select name="editcatid">
@@ -507,8 +584,15 @@ include("uilang.php");
 											<label><i class="fa fa-file"></i> <?php echo uilang("Content") ?></label>
 											<textarea name="editpostcontent" style="height: 250px;"><?php echo $row["content"] ?></textarea>
 											<br><br>
+											
 											<label><i class="fa fa-image"></i> <?php echo uilang("Image File") ?></label>
 											<input class="fileinput" name="newpicture" type="file" accept="image/jpeg, image/png">
+											
+											<label><i class="fa fa-image"></i> <?php echo uilang("Additional Images") ?></label>
+											<div id="moreimagesvisual"></div>
+											<input id="moreimagesinput" name="moreimagesinput" value="<?php echo $row["moreimages"] ?>" style="display: none;">
+											<div class="buybutton" onclick="showimagepicker()"><i class="fa fa-plus"></i> <?php echo uilang("Add") ?></div>
+											<br><br>
 											
 											<label><i class="fa fa-check-square-o"></i> <?php echo uilang("Add more options") ?></label>
 											<input id="moreoptions" name="moreoptions" value='<?php echo $row["options"] ?>' style="display: none;">
@@ -540,8 +624,14 @@ include("uilang.php");
 										
 										<script>
 											setTimeout(function(){
-												moptions = JSON.parse($("#moreoptions").val())
-												updatemovisual()
+												if($("#moreoptions").val() != ""){
+													moptions = JSON.parse($("#moreoptions").val())
+													updatemovisual()
+												}
+												
+												if($("#moreimagesinput").val() != ""){
+													ipdatatovisual()
+												}
 											}, 1000)
 										</script>
 									</div>
@@ -669,7 +759,7 @@ include("uilang.php");
 												?>
 												<tr>
 													<td><?php echo $postdate ?></td>
-													<td><?php echo $row["title"] ?></td>
+													<td><a target="_blank" href="<?php echo $baseurl . "?post=" . $row["postid"] ?>"><i class="fa fa-external-link"></i> <?php echo $row["title"] ?></a></td>
 													<td><?php echo showCatName($row["catid"]) ?></td>
 													<td><a href="<?php echo $baseurl ?>admin.php?editpost=<?php echo $row["id"] ?>"><i class="fa fa-edit"></i> <?php echo uilang("Edit") ?></a></td>
 													<td><a href="<?php echo $baseurl ?>admin.php?deletepost=<?php echo $row["id"] ?>&title=<?php echo $row["title"] ?>"><i class="fa fa-trash"></i> <?php echo uilang("Delete") ?></a></td>
@@ -694,7 +784,63 @@ include("uilang.php");
 					</div>
 				</div>
 				
+				<div id="imagedisplayer" onclick="hideimagedisplayer()"></div>
+				
 				<script>
+				
+					function showimagepicker(){
+						$("body").append("<div id='imagepickerui'><h2 onclick='closeimagepicker()' style='cursor: pointer;'><i class='fa fa-arrow-left'></i> Back</h2><div id='imagepickercontent'>Please wait...</div>")
+						$.get("imagepicker.php", function(data){
+							$("#imagepickercontent").html(data)
+						})
+					}
+					
+					function insertthis(img){
+						var randata = Math.ceil(Math.random()*10000)
+						$("#moreimagesvisual").append("<div class='imgitem' style='display: inline-block; vertical-align: top;' onclick=removethis('" +randata+ "')><div class='imgitemdatarand' style='display: none'>"+randata+"</div><div class='imgitemdata' style='display: none'>"+img+"</div><img src='" + img + "' style='height: 64px; margin: 10px; border-radius: 5px; cursor: not-allowed;'></div>")
+						closeimagepicker()
+						ipvisualtodata()
+					}
+					
+					function removethis(randata){
+						for(var i = 0; i < $(".imgitem").length; i++){
+							if($(".imgitemdatarand").eq(i).text() == randata)
+								$(".imgitem").eq(i).remove()
+						}
+						ipvisualtodata()
+					}
+					
+					function ipvisualtodata(){
+						var data = ""
+						for(var i = 0; i < $(".imgitem").length; i++){
+							data += $(".imgitemdata").eq(i).text() + ",";
+						}
+						$("#moreimagesinput").val(data)
+					}
+					
+					function ipdatatovisual(){
+						var data = $("#moreimagesinput").val()
+						data = data.split(",")
+						for(var i = 0; i < data.length; i++){
+							if(data[i] != ""){
+								insertthis(data[i])
+							}
+						}
+					}
+					
+					function closeimagepicker(){
+						$("#imagepickerui").remove()
+					}
+				
+					function showimage(img){
+						$("#imagedisplayer").html("<img src='<?php echo $baseurl ?>" +img+ "' style='height: 100%;'>").fadeIn()
+					}
+					
+					
+					function hideimagedisplayer(){
+						$("#imagedisplayer").fadeOut()
+					}
+					
 					var moptions = []
 
 					function addnewoptiontitle(){
@@ -784,7 +930,7 @@ include("uilang.php");
 			//show login form
 			else{
 				?>
-				<div style="padding: 100px; width: 400px; margin: 0 auto;">
+				<div class="loginform">
 					<div style="text-align: center; padding: 20px;">
 						<?php
 						$currentlogo = "images/logo.png";
@@ -819,6 +965,10 @@ include("uilang.php");
 			setTimeout(function(){
 				$(".alert").slideUp()
 			}, 2000)
+			
+			function toggleadminmenu(){
+				$(".adminmenubar").toggle()
+			}
 			
 		</script>
 	</body>
