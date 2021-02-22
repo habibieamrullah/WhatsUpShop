@@ -1,5 +1,9 @@
-# WhatsUpOnlineStore
- Nice and simplified online store CMS based on PHP and MySQL
+# WhatsUpShop
+Nice and simplified online store CMS based on PHP and MySQL
+
+PLEASE NOTE: It is improved version of WhatsUpOnlineStore in this link: https://github.com/habibieamrullah/WhatsUpOnlineStore, which to get started, first you need to configure your database credential by editing dbcon.php. In previous version, database credential configuration was inside config.php, but here I've managed to create separated dbcon.php file for it.
+
+## About WhatsUpShop
  
 This PHP software is a lightweight and simple CMS system that allows you to post products with pictures, description, pricing, quantity and options.
 
