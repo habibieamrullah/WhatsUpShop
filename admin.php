@@ -377,6 +377,11 @@ include("uilang.php");
 									$cfg->adminwhatsapp = mysqli_real_escape_string($connection, $_POST["adminwhatsapp"]);
 									$cfg->currencysymbol = mysqli_real_escape_string($connection, $_POST["currencysymbol"]);
 									$cfg->baseurl = mysqli_real_escape_string($connection, $_POST["baseurl"]);
+									$cfg->enablerecentpostsliders = mysqli_real_escape_string($connection, $_POST["enablerecentpostsliders"]);
+									$cfg->enablefacebookcomment = mysqli_real_escape_string($connection, $_POST["enablefacebookcomment"]);
+									$cfg->enablepublishdate = mysqli_real_escape_string($connection, $_POST["enablepublishdate"]);
+									if(isset($_POST["sharebuttonsoption"]))
+										$cfg->sharebuttonsoption = $_POST["sharebuttonsoption"];
 									$JSONcfg = addslashes(json_encode($cfg));
 									
 									mysqli_query($connection, "UPDATE $tableconfig SET value = '$JSONcfg' WHERE config = 'cfg'");
@@ -522,12 +527,79 @@ include("uilang.php");
 									?>
 									<input name="newpicture" type="file" name="logo" style="display: inline-block; width: 300px; vertical-align: middle;">
 									<br>
-									
-									<label><i class="fa fa-link"></i> <?php echo uilang("Base URL (make sure to include '/' symbol at the end)") ?></label>
-									<input placeholder="<?php echo uilang("Base URL") ?>" name="baseurl" value="<?php echo $cfg->baseurl ?>">
 												
 									<label><i class="fa fa-globe"></i> <?php echo uilang("Website Icon (.ico file)") ?></label>
 									<input type="file" name="favicon">
+									
+									<label><i class="fa fa-calendar"></i> <?php echo uilang("Enable Publish Date?") ?></label>
+									<select name="enablepublishdate">
+										<?php 
+										if($enablepublishdate){
+											?>
+											<option value=0><?php echo uilang("No") ?></option>
+											<option value=1 selected><?php echo uilang("Yes") ?></option>
+											<?php
+										}else{
+											?>
+											<option value=0 selected><?php echo uilang("No") ?></option>
+											<option value=1><?php echo uilang("Yes") ?></option>
+											<?php
+										}
+										?>
+									</select>
+									
+									<label><i class="fa fa-exchange"></i> <?php echo uilang("Enable Recent Posts Slider?") ?></label>
+									<select name="enablerecentpostsliders">
+										<?php 
+										if($enablerecentpostsliders){
+											?>
+											<option value=0><?php echo uilang("No") ?></option>
+											<option value=1 selected><?php echo uilang("Yes") ?></option>
+											<?php
+										}else{
+											?>
+											<option value=0 selected><?php echo uilang("No") ?></option>
+											<option value=1><?php echo uilang("Yes") ?></option>
+											<?php
+										}
+										?>
+									</select>
+									
+									
+									
+									<label><i class="fa fa-share-alt"></i> <?php echo uilang("Share Buttons Option") ?></label>
+									
+									<input type="checkbox" name="sharebuttonsoption[]" value="Facebook" <?php if(IsChecked($sharebuttonsoption, "Facebook")){ echo "checked"; } ?>><label for="sbo1" style="display: inline-block;">Facebook</label>
+									<input type="checkbox" name="sharebuttonsoption[]" value="Twitter" <?php if(IsChecked($sharebuttonsoption, "Twitter")){ echo "checked"; } ?>><label for="sbo2" style="display: inline-block;">Twitter</label>
+									<input type="checkbox" name="sharebuttonsoption[]" value="Email" <?php if(IsChecked($sharebuttonsoption, "Email")){ echo "checked"; } ?>><label for="sbo3" style="display: inline-block;">Email</label>
+									<input type="checkbox" name="sharebuttonsoption[]" value="Pinterest" <?php if(IsChecked($sharebuttonsoption, "Pinterest")){ echo "checked"; } ?>><label for="sbo4" style="display: inline-block;">Pinterest</label>
+									<input type="checkbox" name="sharebuttonsoption[]" value="Linkedin" <?php if(IsChecked($sharebuttonsoption, "Linkedin")){ echo "checked"; } ?>><label for="sbo5" style="display: inline-block;">Linkedin</label>
+									<input type="checkbox" name="sharebuttonsoption[]" value="WhatsApp" <?php if(IsChecked($sharebuttonsoption, "WhatsApp")){ echo "checked"; } ?>><label for="sbo6" style="display: inline-block;">WhatsApp</label>
+									<input type="checkbox" name="sharebuttonsoption[]" value="Telegram" <?php if(IsChecked($sharebuttonsoption, "Telegram")){ echo "checked"; } ?>><label for="sbo7" style="display: inline-block;">Telegram</label>
+									
+									
+									<label><i class="fa fa-facebook"></i> <?php echo uilang("Enable Facebook Comment?") ?></label>
+									<select name="enablefacebookcomment">
+										<?php 
+										if($enablefacebookcomment){
+											?>
+											<option value=0><?php echo uilang("No") ?></option>
+											<option value=1 selected><?php echo uilang("Yes") ?></option>
+											<?php
+										}else{
+											?>
+											<option value=0 selected><?php echo uilang("No") ?></option>
+											<option value=1><?php echo uilang("Yes") ?></option>
+											<?php
+										}
+										?>
+									</select>
+									
+									<label><i class="fa fa-link"></i> <?php echo uilang("Base URL (make sure to include '/' symbol at the end)") ?></label>
+									<input placeholder="<?php echo uilang("Base URL") ?>" name="baseurl" value="<?php echo $cfg->baseurl ?>">
+									
+									
+									
 									<input class="submitbutton" type="submit" value="<?php echo uilang("Update") ?>">
 								</form>
 								

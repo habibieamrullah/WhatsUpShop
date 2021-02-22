@@ -56,20 +56,22 @@
 		border: 2px solid <?php echo $maincolor ?>;
 	}
 	
-	select{ 
-		outline: 2px solid <?php echo $maincolor ?>;
-	}
 	
 	input[type=submit]{
 		font-weight: bold;
 		color: white;
 	}
 	
+	input[type=checkbox]{
+		width: 20px;
+	}
+	
 	select{
 		padding: 20px;
-		border-radius: 5px;
+		border-radius: 0px;
 		margin-bottom: 20px;
 		border: none;
+		outline: 2px solid <?php echo $maincolor ?>;
 	}
 	
 	.submitbutton{
@@ -180,10 +182,10 @@
 		display: inline-block;
 		vertical-align: middle;
 		padding: 20px;
+		padding: 10px; padding-top: 15px; padding-left: 20px; padding-right: 0px;
 	}
 	
 	#header{
-		text-align: center;
 		background-color: rgba(255, 255, 255, .75);		
 		font-size: 25px;
 		/*border-bottom: 1px solid <?php echo $maincolor ?>;*/
@@ -191,17 +193,18 @@
 		-moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.35);
 		box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.35);
 		
-	}
-	
-	#searchbar{
-		background-color: rgba(255, 255, 255, .5);		
-		border-bottom: 1px solid white;
 		backdrop-filter: blur(15px);
 		-webkit-backdrop-filter: blur(15px);
 		position: -webkit-sticky; /* Safari */
 		position: sticky;
 		top: 0;
 		z-index: 100;
+		
+	}
+	
+	#categoriesbar{
+		background-color: rgba(255, 255, 255, .5);		
+		border-bottom: 1px solid white;
 	}
 	
 	#cartbutton{
@@ -566,17 +569,144 @@
 		background-color: <?php echo $secondcolor ?>;
 	}
 	
-	.topabout{
-		font-size: 16px;
-		padding-bottom: 30px;
-		font-style: italic;
+	.floatright{
+		float: right;
+		margin-top: 10px;
+		margin-right: 10px;
+		width: 200px;
 	}
-	.topabout p{
-		margin: 0px;
+	
+	.producthalfbox{
+		display: table-cell;
+		vertical-align: top;
 	}
+	
+	.leftphb{
+		width: 256px;
+		padding-right: 10px;
+	}
+	
+	#imagepickerui{
+		position: fixed;
+		top: 0;
+		left: 0; 
+		right: 0;
+		bottom: 0;
+		background-color: rgba(0,0,0,.75);
+		padding: 50px;
+		color: white;
+		
+		backdrop-filter: blur(5px);
+		-webkit-backdrop-filter: blur(5px);
+	}
+	
+	.cartbuttoncircle{
+		width: 96px; height: 96px;
+	}
+	
+	.loginform{
+		padding: 100px; width: 400px; margin: 0 auto;
+	}
+	
+	.adminmenubar{
+		display: table-cell; width: 140px; background-color: black; color: white;
+	}
+	
+	.barsbutton{
+		display: none;
+	}
+	
+	.stickythingy{
+		position: -webkit-sticky; /* Safari */
+		position: sticky;
+		top: 0;
+	}
+	
+	
 	
 	/* mobile view */
 	@media (max-width: 800px){
+		
+		.inlinecenterblock{
+			display: block;
+			text-align: center;
+			padding: 10px;
+			box-sizing: border-box;
+			width: 100%;
+			margin: 0px;
+		}
+		
+		
+		#cartui{
+			padding: 10px;
+		}
+		
+		.buybutton{
+			margin: 5px;
+		}
+		
+		.barsbutton{
+			display: block;
+			position: fixed;
+			top: 0;
+			left: 0;
+			padding: 7px;
+			background-color: rgba(0,0,0,.75);
+			color: white;
+			z-index: 100;
+		}
+		
+		.adminmenubar{
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			z-index: 99;
+		}
+		
+		.stickythingy{
+			position: static;
+		}
+		
+		.loginform{
+			padding: 10px;
+			width: 100%;
+			box-sizing: border-box;
+		}
+		
+		
+		.cartbuttoncircle{
+			width: 64px; height: 64px;
+		}
+		
+		#cartbutton{
+			padding: 10px;
+			font-size: 20px;
+		}
+		
+		#header{
+			position: static;
+		}
+		
+		.productthumbnail{
+			width: 128px;
+			height: 128px;
+		}
+		
+		.filmblock{
+			width: 128px;
+			font-size: 12px;
+			margin: 2px;
+		}
+		
+		.floatright{
+			float: none;
+			margin: 0px;
+			width: 100%;
+			box-sizing: border-box;
+		}
+		
 		.footerlink{
 			display: block;
 			padding: 20px;
@@ -643,7 +773,7 @@
 		}
 		
 		.randomvidblock:hover{
-			background-color: black;
+			background-color: white;
 			transition: background-color .5s;
 		}
 		
@@ -659,6 +789,14 @@
 		
 		#webvideo{
 			height: 256px;
+		}
+		
+		.producthalfbox{
+			display: block;
+		}
+		
+		.leftphb{
+			width: 100%;
 		}
 		
 	}

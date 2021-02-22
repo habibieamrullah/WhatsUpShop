@@ -18,28 +18,24 @@ Step 5 : Run the web, and login to your Admin Panel by accessing admin.php page
 $username = "admin";
 $password = "admin";
 
-//Database connection
-$host = "localhost";
-$databaseprefix = "whatsupshop_";
 
-$databasename = "mydatabase";
-$dbuser = "root";
-$dbpassword = "";
+//Database connection
+include("dbcon.php");
 
 $connection = mysqli_connect($host, $dbuser, $dbpassword, $databasename);
 $connection->set_charset("utf8");
 
 //Database table names
-$tableconfig = $databaseprefix . "config";
-$tableposts = $databaseprefix . "posts";
-$tablecategories = $databaseprefix . "categories";
-$tablemessages = $databaseprefix . "messages";
+$tableconfig = $tableprefix . "config";
+$tableposts = $tableprefix . "posts";
+$tablecategories = $tableprefix . "categories";
+$tablemessages = $tableprefix . "messages";
 
 //Creating tables - config
 mysqli_query($connection, "CREATE TABLE IF NOT EXISTS $tableconfig (
 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 config VARCHAR(150) NOT NULL,
-value VARCHAR(1500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+value TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
 )");
 
 //Creating tables - posts
@@ -47,13 +43,14 @@ mysqli_query($connection, "CREATE TABLE IF NOT EXISTS $tableposts (
 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 postid VARCHAR(70) NOT NULL,
 catid INT(6) NOT NULL,
-normalprice INT(6) NOT NULL,
-discountprice INT(6) NOT NULL,
+normalprice FLOAT NOT NULL,
+discountprice FLOAT NOT NULL,
 title VARCHAR(300) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 time VARCHAR(150) NOT NULL,
 options VARCHAR(200) NOT NULL,
-picture VARCHAR(150) NOT NULL,
-content VARCHAR(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+picture VARCHAR(300) NOT NULL,
+moreimages TEXT NOT NULL,
+content TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
 )");
 
 //Creating tables - categories
@@ -69,17 +66,30 @@ date VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 message VARCHAR(1300) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
 )");
 
+//Make empty variables
+$websitetitle = "";
+
 //Default website config values
-$websitetitle = "WhatsUpShop";
-$maincolor = "#c04d7b";
-$secondcolor = "#a9394c";
-$about = "<p>Just another cool online shop.</p><p>Timing 7:00 AM to 9:00 PM</p><p>Free Delivery Within 10KM</p>";
+$cfg = new \stdClass();
+$cfg->websitetitle = "Kuching Claras Online Store";
+$cfg->maincolor = "#f28433";
+$cfg->secondcolor = "#ffb98a";
+$cfg->about = "<p>Just another cool online shop. Timing 7:00 AM to 9:00 PM. Free Delivery Within 10KM</p>";
+$cfg->language = "en";
+$cfg->logo = "";
+$cfg->adminwhatsapp = "6287880334339";
+$cfg->currencysymbol = "$";
+$cfg->enablerecentpostsliders = true;
+$cfg->enablefacebookcomment = true;
+$cfg->enablepublishdate = true;
+$cfg->sharebuttonsoption = "";
+
+//Base URL
 $baseurl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-$language = "en";
-$logo = "";
-$adminwhatsapp = "6287880334339";
-$currencysymbol = "$";
-$baseurl = str_replace("index.php", "", $baseurl);
+$cfg->baseurl = str_replace("index.php", "", $baseurl);
+
+//ConfigJSON
+$JSONcfg = json_encode($cfg);
 
 //Generating default website config
 $sql = "SELECT * FROM $tableconfig";
@@ -88,49 +98,24 @@ $result = mysqli_query($connection, $sql);
 //Check if its blank
 if(mysqli_num_rows($result) == 0){
 	//Then generate default values
-	$sql = "INSERT INTO $tableconfig (config, value) VALUES ('websitetitle', '$websitetitle');";
-	$sql .= "INSERT INTO $tableconfig (config, value) VALUES ('maincolor', '$maincolor');";
-	$sql .= "INSERT INTO $tableconfig (config, value) VALUES ('secondcolor', '$secondcolor');";
-	$sql .= "INSERT INTO $tableconfig (config, value) VALUES ('about', '$about');";
-	$sql .= "INSERT INTO $tableconfig (config, value) VALUES ('language', '$language');";
-	$sql .= "INSERT INTO $tableconfig (config, value) VALUES ('adminwhatsapp', '$adminwhatsapp');";
-	$sql .= "INSERT INTO $tableconfig (config, value) VALUES ('logo', '$logo');";
-	$sql .= "INSERT INTO $tableconfig (config, value) VALUES ('currencysymbol', '$currencysymbol');";
-	$sql .= "INSERT INTO $tableconfig (config, value) VALUES ('baseurl', '$baseurl');";
-	
-	mysqli_multi_query($connection, $sql);
+	mysqli_query($connection, $sql = "INSERT INTO $tableconfig (config, value) VALUES ('cfg', '$JSONcfg');");
 }else{
 	//Then load the website configurations
 	while($row = mysqli_fetch_assoc($result)){
-		switch($row["config"]){
-			case "websitetitle" :
-				$websitetitle = $row["value"];
-				break;
-			case "maincolor" :
-				$maincolor = $row["value"];
-				break;
-			case "secondcolor" :
-				$secondcolor = $row["value"];
-				break;
-			case "about" :
-				$about = $row["value"];
-				break;
-			case "language" :
-				$language = $row["value"];
-				break;
-			case "baseurl" :
-				$baseurl = $row["value"];
-				break;
-			case "adminwhatsapp" :
-				$adminwhatsapp = $row["value"];
-				break;
-			case "logo" :
-				$logo = $row["value"];
-				break;
-			case "currencysymbol" :
-				$currencysymbol = $row["value"];
-				break;
-		}
+		$cfg = json_decode($row["value"]);
+		$websitetitle = stripslashes($cfg->websitetitle);
+		$maincolor = $cfg->maincolor;
+		$secondcolor = $cfg->secondcolor;
+		$about = stripslashes($cfg->about);
+		$language = $cfg->language;
+		$logo = $cfg->logo;
+		$adminwhatsapp = $cfg->adminwhatsapp;
+		$currencysymbol = str_replace("u20b9", "₹", $cfg->currencysymbol);
+		$baseurl = $cfg->baseurl;
+		$enablerecentpostsliders = $cfg->enablerecentpostsliders;
+		$sharebuttonsoption = $cfg->sharebuttonsoption;
+		$enablefacebookcomment = $cfg->enablefacebookcomment;
+		$enablepublishdate = $cfg->enablepublishdate;
 	}
 }
 

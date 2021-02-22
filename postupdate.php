@@ -11,6 +11,7 @@ if(isset($_POST["editposttitle"]) && isset($_POST["id"])){
 	$discountprice = mysqli_real_escape_string($connection, $_POST["editdiscountprice"]);
 	$content = mysqli_real_escape_string($connection, $_POST["editpostcontent"]);
 	$moreoptions = mysqli_real_escape_string($connection, $_POST["moreoptions"]);
+	$moreimages = mysqli_real_escape_string($connection, $_POST["moreimagesinput"]);
 	
 	if($posttitle != "" && $content != ""){
 		
@@ -42,6 +43,7 @@ if(isset($_POST["editposttitle"]) && isset($_POST["id"])){
 							$result = move_uploaded_file($_FILES['newpicture']['tmp_name'], $name);
 						}
 						?>
+						
 						<div class="alert"><?php echo uilang("Picture upload is OK") ?>.</div>
 						<?php
 						$newpicture = $newpicture .".". $extension;
@@ -60,7 +62,7 @@ if(isset($_POST["editposttitle"]) && isset($_POST["id"])){
 				$newpicture = $oldpicture;
 			}
 			
-			mysqli_query($connection, "UPDATE $tableposts SET title = '$posttitle', catid = $catid, content = '$content', picture = '$newpicture', normalprice='$normalprice', discountprice='$discountprice', options='$moreoptions' WHERE id = $id");
+			mysqli_query($connection, "UPDATE $tableposts SET title = '$posttitle', catid = $catid, content = '$content', picture = '$newpicture', normalprice='$normalprice', discountprice='$discountprice', options='$moreoptions', moreimages = '$moreimages' WHERE id = $id");
 			echo "<div class='alert'>" .uilang("Post successfully updated."). "</div>";
 		
 		}

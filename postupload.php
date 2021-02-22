@@ -14,6 +14,7 @@ if(isset($_POST["newposttitle"])){
 	if($discountprice == "")
 		$discountprice = 0;
 	$moreoptions = mysqli_real_escape_string($connection, $_POST["moreoptions"]);
+	$moreimages = mysqli_real_escape_string($connection, $_POST["moreimagesinput"]);
 	$currenttime = round(microtime(true) * 1000);
 	if($newposttitle != "" && $newpostcontent != ""){
 		
@@ -49,7 +50,7 @@ if(isset($_POST["newposttitle"])){
 			}
 		}
 		
-		mysqli_query($connection, "INSERT INTO $tableposts (postid, catid, title, content, picture, time, normalprice, discountprice, options) VALUES ('$postid', $catid, '$newposttitle', '$newpostcontent', '$newpicture', '$currenttime', '$normalprice', '$discountprice', '$moreoptions')");
+		mysqli_query($connection, "INSERT INTO $tableposts (postid, catid, title, content, picture, time, normalprice, discountprice, options, moreimages) VALUES ('$postid', $catid, '$newposttitle', '$newpostcontent', '$newpicture', '$currenttime', '$normalprice', '$discountprice', '$moreoptions', '$moreimages')");
 		
 		?>
 		<h3><?php echo uilang("Congratulation!") ?></h3>
