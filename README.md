@@ -1,7 +1,7 @@
 # WhatsUpShop
 Nice and simplified online store CMS based on PHP and MySQL
 
-PLEASE NOTE: It is improved version of WhatsUpOnlineStore in this link: https://github.com/habibieamrullah/WhatsUpOnlineStore, which to get started, first you need to configure your database credential by editing dbcon.php. In previous version, database credential configuration was inside config.php, but here I've managed to create separated dbcon.php file for it.
+PLEASE NOTE: It is improved version of WhatsUpOnlineStore, the previous version of this program in this link: https://github.com/habibieamrullah/WhatsUpOnlineStore, which to get started, first you need to configure your database credential by editing dbcon.php. In previous version, database credential configuration was inside config.php, but here I've managed to create separated dbcon.php file for it.
 
 ## About WhatsUpShop
  

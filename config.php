@@ -71,10 +71,10 @@ $websitetitle = "";
 
 //Default website config values
 $cfg = new \stdClass();
-$cfg->websitetitle = "Kuching Claras Online Store";
+$cfg->websitetitle = "WhatsUpShop";
 $cfg->maincolor = "#f28433";
 $cfg->secondcolor = "#ffb98a";
-$cfg->about = "<p>Just another cool online shop. Timing 7:00 AM to 9:00 PM. Free Delivery Within 10KM</p>";
+$cfg->about = "<p>Just another cool online shop.</p>";
 $cfg->language = "en";
 $cfg->logo = "";
 $cfg->adminwhatsapp = "6287880334339";
@@ -82,7 +82,7 @@ $cfg->currencysymbol = "$";
 $cfg->enablerecentpostsliders = true;
 $cfg->enablefacebookcomment = true;
 $cfg->enablepublishdate = true;
-$cfg->sharebuttonsoption = "";
+$cfg->sharebuttonsoption = array();
 
 //Base URL
 $baseurl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -113,7 +113,10 @@ if(mysqli_num_rows($result) == 0){
 		$currencysymbol = str_replace("u20b9", "₹", $cfg->currencysymbol);
 		$baseurl = $cfg->baseurl;
 		$enablerecentpostsliders = $cfg->enablerecentpostsliders;
-		$sharebuttonsoption = $cfg->sharebuttonsoption;
+		if(isset($cfg->sharebuttonsoption))
+			$sharebuttonsoption = $cfg->sharebuttonsoption;
+		else 
+			$sharebuttonsoption = array();
 		$enablefacebookcomment = $cfg->enablefacebookcomment;
 		$enablepublishdate = $cfg->enablepublishdate;
 	}

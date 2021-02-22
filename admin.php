@@ -380,8 +380,9 @@ include("uilang.php");
 									$cfg->enablerecentpostsliders = mysqli_real_escape_string($connection, $_POST["enablerecentpostsliders"]);
 									$cfg->enablefacebookcomment = mysqli_real_escape_string($connection, $_POST["enablefacebookcomment"]);
 									$cfg->enablepublishdate = mysqli_real_escape_string($connection, $_POST["enablepublishdate"]);
-									if(isset($_POST["sharebuttonsoption"]))
+									if(isset($_POST["sharebuttonsoption"])){
 										$cfg->sharebuttonsoption = $_POST["sharebuttonsoption"];
+									}
 									$JSONcfg = addslashes(json_encode($cfg));
 									
 									mysqli_query($connection, "UPDATE $tableconfig SET value = '$JSONcfg' WHERE config = 'cfg'");

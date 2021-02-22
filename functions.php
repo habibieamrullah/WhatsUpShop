@@ -1,10 +1,13 @@
 <?php
 
 function IsChecked($chkname,$value){
-	foreach($chkname as $chkval){
-		if($chkval == $value){
-			return true;
+	if($chkname != ""){
+		foreach($chkname as $chkval){
+			if($chkval == $value){
+				return true;
+			}
 		}
+		return false;
 	}
 	return false;
 }
