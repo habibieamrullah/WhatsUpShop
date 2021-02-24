@@ -225,7 +225,7 @@ if($websitetitle == ""){
 							<div class="randomvidblock orderblock">
 								<h2><?php echo uilang("Order") ?></h2>
 								<label><i class="fa fa-plus"></i> <?php echo uilang("Quantity") ?></label>
-								<input id="currentQ" type="number" value=1 onchange="updateCurrentTotal()" min=1 style="border-radius: 0px;">
+								<input id="currentQ" type="number" value=1 onchange="updateCurrentTotal()" min=1 step=1 style="border-radius: 0px;" onkeyup="onlyNumbers(this)">
 								
 								<?php
 								if($row["options"] != ""){
@@ -486,7 +486,7 @@ if($websitetitle == ""){
 										}
 										?>
 										
-										<h2 style="margin-top: 20px;" class="producttitle"><?php echo shorten_text($row["title"], 25, ' ...', false) ?></h2><div class="realproducttitle" style="display: none"><?php echo $row["title"] ?></div><div class="productoptions" style="display: none"><?php echo $row["options"] ?></div><div style="padding-bottom: 20px; font-size: 25px; font-weight: bold; color: <?php echo $maincolor ?>"><?php echo $oldprice . $currencysymbol . "<span class='thiscurrentpricedisplay'>" . number_format($saleprice, 2) ?></span><span style="display: none;" class="thiscurrentprice"><?php echo $saleprice ?></span> <span style="font-size: 12px;">x</span> <input class="productquantity" type="number" value=1 min=1 style="vertical-align: middle; display: inline-block; width: 60px; font-weight: bold; padding: 10px; margin: 5px; border-radius: 0px;"></div>
+										<h2 style="margin-top: 20px;" class="producttitle"><?php echo shorten_text($row["title"], 25, ' ...', false) ?></h2><div class="realproducttitle" style="display: none"><?php echo $row["title"] ?></div><div class="productoptions" style="display: none"><?php echo $row["options"] ?></div><div style="padding-bottom: 20px; font-size: 25px; font-weight: bold; color: <?php echo $maincolor ?>"><?php echo $oldprice . $currencysymbol . "<span class='thiscurrentpricedisplay'>" . number_format($saleprice, 2) ?></span><span style="display: none;" class="thiscurrentprice"><?php echo $saleprice ?></span> <span style="font-size: 12px;">x</span> <input class="productquantity" type="number" value=1 min=1 style="vertical-align: middle; display: inline-block; width: 60px; font-weight: bold; padding: 10px; margin: 5px; border-radius: 0px;" onkeyup="onlyNumbers(this)"></div>
 										<div class="morebutton" onclick="addtocart(<?php echo $productindex ?>)"><i class="fa fa-shopping-cart"></i> <?php echo uilang("Add to Cart") ?></div>
 										<div style="padding: 20px;"><a onclick="showmore(<?php echo $productindex ?>)" class="textlink whatsmorebutton" style="cursor: pointer; text-decoration: none;"><i class="fa fa-chevron-down"></i> <?php echo uilang("More") ?></a><div class="whatsmorecontent" style="display: none; padding: 5px; font-size: 12px;"><?php echo shorten_text(strip_tags($row["content"]), 50, " ...") ?><br><a class="textlink" href="<?php echo $baseurl ?>?post=<?php echo $row["postid"] ?>"><?php echo uilang("Continue") ?></a></div></div>
 									</div>
@@ -674,7 +674,7 @@ if($websitetitle == ""){
 						cartdata += "<div style='display: table; width: 100%;'>";
 						for(var i = 0; i < cartobject.length; i++){
 							var tmpttl = cartobject[i].price * cartobject[i].quantity
-							cartdata += "<div style='margin-bottom: 20px; display: table-row;'><div style='display: table-cell; vertical-align: top;'><img src='<?php echo $baseurl ?>"+cartobject[i].image+"' style='display: inline-block; vertical-align: middle; max-width: 64px; border-radius: 5px; margin-bottom: 10px;'></div><div style='display: table-cell; vertical-align: top;'>"+cartobject[i].title + " <?php echo $currencysymbol ?>" + tSep(parseFloat(cartobject[i].price).toFixed(2)) + "</div><div style='display: table-cell; vertical-align: top;'>x <input id='cartq"+i+"' onchange='modifycq("+i+")' class='productquantity' type='number' value=" + cartobject[i].quantity + " min=1 style='vertical-align: middle; display: inline-block; width: 60px; font-weight: bold; padding: 10px; margin: 5px; border-radius: 0px;'>=</div><div style='display: table-cell; vertical-align: top;'><div style='padding: 5px;'><?php echo $currencysymbol ?>" + tSep(tmpttl.toFixed(2)) + "</div></div></div>"
+							cartdata += "<div style='margin-bottom: 20px; display: table-row;'><div style='display: table-cell; vertical-align: top;'><img src='<?php echo $baseurl ?>"+cartobject[i].image+"' style='display: inline-block; vertical-align: middle; max-width: 64px; border-radius: 5px; margin-bottom: 10px;'></div><div style='display: table-cell; vertical-align: top;'>"+cartobject[i].title + " <?php echo $currencysymbol ?>" + tSep(parseFloat(cartobject[i].price).toFixed(2)) + "</div><div style='display: table-cell; vertical-align: top;'>x <input id='cartq"+i+"' onchange='modifycq("+i+")' class='productquantity' type='number' value=" + cartobject[i].quantity + " min=1 style='vertical-align: middle; display: inline-block; width: 60px; font-weight: bold; padding: 10px; margin: 5px; border-radius: 0px;' onkeyup='onlyNumbers(this)'>=</div><div style='display: table-cell; vertical-align: top;'><div style='padding: 5px;'><?php echo $currencysymbol ?>" + tSep(tmpttl.toFixed(2)) + "</div></div></div>"
 							grandtotal += tmpttl
 							
 							ordermessage += "- " + cartobject[i].title + " x " + cartobject[i].quantity + " = <?php echo $currencysymbol ?> " + tmpttl.toFixed(2) + "\n"
@@ -727,9 +727,11 @@ if($websitetitle == ""){
 						$.post("<?php echo $baseurl ?>ordernotes.php", {
 							"message" : ordermessage
 						}, function(data){
-							var omuri = encodeURI(ordermessage)
-							//alert(ordermessage);
-							location.href = "https://wa.me/<?php echo $adminwhatsapp ?>?text=" + omuri
+							ordermessage = ordermessage.replaceAll("&", "and");
+							var omuri = encodeURI(ordermessage);
+							console.log(ordermessage);
+							//location.href = "https://wa.me/<?php echo $adminwhatsapp ?>?text=" + omuri
+							window.open("https://wa.me/<?php echo $adminwhatsapp ?>?text=" + omuri, '_blank');
 						})
 					
 					}else{
@@ -782,6 +784,12 @@ if($websitetitle == ""){
 						infinite: true,
 					});
 				})
+				
+				function onlyNumbers(num){
+				   if ( /[^0-9]+/.test(num.value) ){
+					  num.value = num.value.replace(/[^0-9]*/g,"")
+				   }
+				}
 			</script>
 		</body>
 	</html>
