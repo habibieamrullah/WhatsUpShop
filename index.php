@@ -108,7 +108,28 @@ if($websitetitle == ""){
 			
 			if(isset($_GET["post"])){
 				?>
+				<div class="section" id="categoriesbar">
+					<div style="text-align: center; overflow: auto; white-space: nowrap;">
+						<?php
+						$sql = "SELECT * FROM $tablecategories ORDER BY category ASC";
+						$result = mysqli_query($connection, $sql);
+						if($result){
+							?>
+							<a href="<?php echo $baseurl ?>#filtercat=all"><div onclick="filtercategory('')" class="categoryblock" style="border: 1px solid <?php echo $maincolor ?>;padding: 10px; cursor: pointer;"><i class="fa fa-tag"></i> <?php echo uilang("All") ?></div></a>
+							<?php
+							while($row = mysqli_fetch_assoc($result)){
+								?>
+								<a href="<?php echo $baseurl ?>#filtercat=<?php echo $row["category"] ?>"><div onclick="filtercategory('<?php echo $row["category"] ?>')" class="categoryblock" style="border: 1px solid <?php echo $maincolor ?>;padding: 10px; cursor: pointer;"><i class="fa fa-tag"></i> <?php echo $row["category"] ?></div></a>
+								<?php
+							}
+						}
+						?>
+					</div>
+				</div>
+
 				<div class="section">
+					
+										
 					<div class="posttableblock">
 						<div class="postcontent">
 						
@@ -467,12 +488,19 @@ if($websitetitle == ""){
 								<div class="filmblock">
 									<div class="categoryname" style="display: none;"><?php echo $currentcategory ?></div>
 									<a href="<?php echo $baseurl ?>?post=<?php echo $row["postid"] ?>">
-										<!--
-										<div class="productthumbnail" style="cursor: pointer; background: url(<?php echo $baseurl . $imagefile ?>) no-repeat center center; background-size: cover; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover;">
-										-->
-										
-										<div class="productthumbnail" style="cursor: pointer; background-image: url(<?php echo $baseurl . $imagefile ?>); background-attachment: fill; background-position: center; background-repeat: no-repeat; background-size: auto 100%;">
-										</div>
+										<?php
+										if($thumbnailmode == "0"){
+											?>
+												<div class="productthumbnail" style="cursor: pointer; background-image: url(<?php echo $baseurl . $imagefile ?>); background-attachment: fill; background-position: center; background-repeat: no-repeat; background-size: auto 100%;">
+											</div>
+											<?php
+										}else if($thumbnailmode == "1"){
+											?>
+												<div class="productthumbnail" style="cursor: pointer; background-image: url(<?php echo $baseurl . $imagefile ?>); background-attachment: fill; background-position: center; background-repeat: no-repeat; background-size: 100% 100%;">
+											</div>
+											<?php
+										}
+										?>
 									</a>
 									<div class="prodimage" style="display: none;"><?php echo $imagefile ?></div>
 									<div>
@@ -674,7 +702,7 @@ if($websitetitle == ""){
 						cartdata += "<div style='display: table; width: 100%;'>";
 						for(var i = 0; i < cartobject.length; i++){
 							var tmpttl = cartobject[i].price * cartobject[i].quantity
-							cartdata += "<div style='margin-bottom: 20px; display: table-row;'><div style='display: table-cell; vertical-align: top;'><img src='<?php echo $baseurl ?>"+cartobject[i].image+"' style='display: inline-block; vertical-align: middle; max-width: 64px; border-radius: 5px; margin-bottom: 10px;'></div><div style='display: table-cell; vertical-align: top;'>"+cartobject[i].title + " <?php echo $currencysymbol ?>" + tSep(parseFloat(cartobject[i].price).toFixed(2)) + "</div><div style='display: table-cell; vertical-align: top;'>x <input id='cartq"+i+"' onchange='modifycq("+i+")' class='productquantity' type='number' value=" + cartobject[i].quantity + " min=1 style='vertical-align: middle; display: inline-block; width: 60px; font-weight: bold; padding: 10px; margin: 5px; border-radius: 0px;' onkeyup='onlyNumbers(this)'>=</div><div style='display: table-cell; vertical-align: top;'><div style='padding: 5px;'><?php echo $currencysymbol ?>" + tSep(tmpttl.toFixed(2)) + "</div></div></div>"
+							cartdata += "<div style='margin-bottom: 20px; display: table-row;'><div style='display: table-cell; vertical-align: top;'><img src='<?php echo $baseurl ?>"+cartobject[i].image+"' style='max-width: 64px; border-radius: 5px; margin-bottom: 10px;'></div><div style='display: table-cell; vertical-align: top; padding-left: 10px; padding-right: 10px; font-size: 14px;'>"+cartobject[i].title + " <?php echo $currencysymbol ?>" + tSep(parseFloat(cartobject[i].price).toFixed(2)) + "</div><div style='display: table-cell; vertical-align: top;'>*</div><div style='display: table-cell; vertical-align: top;'><input id='cartq"+i+"' onchange='modifycq("+i+")' class='productquantity' type='number' value=" + cartobject[i].quantity + " min=1 style='vertical-align: top; display: inline-block; width: 60px; font-weight: bold; padding: 10px; margin: 5px; border-radius: 0px;' onkeyup='onlyNumbers(this)'></div><div style='display: table-cell; vertical-align: top;'>=</div><div style='display: table-cell; vertical-align: top;'><div style='padding: 5px;'><?php echo $currencysymbol ?>" + tSep(tmpttl.toFixed(2)) + "</div></div></div>"
 							grandtotal += tmpttl
 							
 							ordermessage += "- " + cartobject[i].title + " x " + cartobject[i].quantity + " = <?php echo $currencysymbol ?> " + tmpttl.toFixed(2) + "\n"
@@ -771,6 +799,10 @@ if($websitetitle == ""){
 						if(location.href.split("#")[1].split("=")[1] != ""){
 							$("#quicksearch").val(location.href.split("#")[1].split("=")[1])
 							quicksearch()
+						}
+					}else if(location.href.split("#")[1].split("=")[0] == "filtercat"){
+						if(location.href.split("#")[1].split("=")[1] != ""){
+							filtercategory(location.href.split("#")[1].split("=")[1]);
 						}
 					}
 				}catch(e){

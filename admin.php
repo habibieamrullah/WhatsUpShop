@@ -82,10 +82,10 @@ include("uilang.php");
 										$currentlogo = "pictures/" . $logo;
 									}
 									?>
-									<a href="<?php echo $baseurl ?>admin.php"><img src="<?php echo $currentlogo ?>" style="display: border-box; width: 100%;"></a>
+									<a target="_blank" href="<?php echo $baseurl ?>"><img src="<?php echo $currentlogo ?>" style="display: border-box; width: 100%;"></a>
 								</div>
 								<a href="<?php echo $baseurl ?>admin.php"><div class="adminleftbaritem"><i class="fa fa-home" style="width: 30px;"></i> <?php echo uilang("Home") ?></div></a>
-								<a href="<?php echo $baseurl ?>admin.php?newpost"><div class="adminleftbaritem"><i class="fa fa-plus" style="width: 30px;"></i> <?php echo uilang("New Post") ?></div></a>
+								<a href="<?php echo $baseurl ?>admin.php?newpost"><div class="adminleftbaritem"><i class="fa fa-plus" style="width: 30px;"></i> <?php echo uilang("Add Product") ?></div></a>
 								<a href="<?php echo $baseurl ?>admin.php?pictures"><div class="adminleftbaritem"><i class="fa fa-image" style="width: 30px;"></i> <?php echo uilang("Pictures") ?></div></a>
 								<a href="<?php echo $baseurl ?>admin.php?categories"><div class="adminleftbaritem"><i class="fa fa-tag" style="width: 30px;"></i> <?php echo uilang("Categories") ?></div></a>
 								<a href="<?php echo $baseurl ?>admin.php?orders"><div class="adminleftbaritem"><i class="fa fa-file-text" style="width: 30px;"></i> <?php echo uilang("Orders") ?></div></a>
@@ -101,7 +101,7 @@ include("uilang.php");
 							if(isset($_GET["newpost"])){
 								?>
 								<div class="postform">
-									<h1><?php echo uilang("New Post") ?></h1>
+									<h1><?php echo uilang("Add Product") ?></h1>
 									<form action="postupload.php" method="post" enctype="multipart/form-data">
 										<label><i class="fa fa-edit"></i> <?php echo uilang("Title") ?></label>
 										<input name="newposttitle" placeholder="<?php echo uilang("Title") ?>">
@@ -373,6 +373,7 @@ include("uilang.php");
 									$cfg->secondcolor = mysqli_real_escape_string($connection, $_POST["secondcolor"]);
 									$cfg->about = $_POST["about"];
 									$cfg->language = mysqli_real_escape_string($connection, $_POST["language"]);
+									$cfg->thumbnailmode = mysqli_real_escape_string($connection, $_POST["thumbnailmode"]);
 									$cfg->logo = $logo;
 									$cfg->adminwhatsapp = mysqli_real_escape_string($connection, $_POST["adminwhatsapp"]);
 									$cfg->currencysymbol = mysqli_real_escape_string($connection, $_POST["currencysymbol"]);
@@ -380,9 +381,8 @@ include("uilang.php");
 									$cfg->enablerecentpostsliders = mysqli_real_escape_string($connection, $_POST["enablerecentpostsliders"]);
 									$cfg->enablefacebookcomment = mysqli_real_escape_string($connection, $_POST["enablefacebookcomment"]);
 									$cfg->enablepublishdate = mysqli_real_escape_string($connection, $_POST["enablepublishdate"]);
-									if(isset($_POST["sharebuttonsoption"])){
+									if(isset($_POST["sharebuttonsoption"]))
 										$cfg->sharebuttonsoption = $_POST["sharebuttonsoption"];
-									}
 									$JSONcfg = addslashes(json_encode($cfg));
 									
 									mysqli_query($connection, "UPDATE $tableconfig SET value = '$JSONcfg' WHERE config = 'cfg'");
@@ -457,6 +457,13 @@ include("uilang.php");
 										}
 									}
 									echo "<div class='alert'>" .uilang("Settings updated!"). "</div>";
+									?>
+									<script>
+									setTimeout(function(){
+										location.href = "?settings";
+									}, 1000);
+									</script>
+									<?php
 								}
 								
 								?>
@@ -489,6 +496,13 @@ include("uilang.php");
 									
 									<label><i class="fa fa-info"></i> <?php echo uilang("About") ?></label>
 									<textarea placeholder="<?php echo uilang("About") ?>" name="about"><?php echo stripslashes($cfg->about) ?></textarea>
+									<br>
+									
+									<label><i class="fa fa-language"></i> <?php echo uilang("Home Thumbnail Mode") ?></label>
+									<select name="thumbnailmode">
+										<option value=0 <?php if($cfg->thumbnailmode == "0"){ echo "selected"; } ?>><?php echo uilang("Center Filled") ?></option>
+										<option value=1 <?php if($cfg->thumbnailmode == "1"){ echo "selected"; } ?>><?php echo uilang("Stretched Width or Height") ?></option>
+									</select>
 									<br>
 									
 									<label><i class="fa fa-language"></i> <?php echo uilang("Language") ?></label>

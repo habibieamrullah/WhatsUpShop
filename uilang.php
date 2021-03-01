@@ -14,6 +14,9 @@ WebSite: https://webappdev.my.id
 		$definitions = array(
 			"A picture has been deleted." => "Sebuah gambar telah dihapus.",
 			"About" => "Tentang",
+			"Home Thumbnail Mode" => "Mode Thumbnail Halaman Utama",
+			"Center Filled" => "Penuh dari Tengah",
+			"Stretched Width or Height" => "Lebar atau Tinggi Tertarik",
 			"Please fill all details." => "Tolong isi semuanya.",
 			"Add more options" => "Tambahkan opsi",
 			"Add more picture" => "Tambahkan gambar lain",
@@ -21,6 +24,7 @@ WebSite: https://webappdev.my.id
 			"Add new option title:" => "Tambah judul opsi baru",
 			"Add to Cart" => "Tambah ke Keranjang",
 			"Add" => "Tambah",
+			"Add Product" => "Tambah Produk",
 			"Additional Images" => "Gambar Tambahan",
 			"Address" => "Alamat",
 			"Delivery Address" => "Alamat Pengiriman",

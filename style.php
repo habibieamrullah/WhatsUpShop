@@ -663,6 +663,8 @@
 			left: 0;
 			bottom: 0;
 			z-index: 99;
+			width: 40%;
+			overflow: auto;
 		}
 		
 		.stickythingy{
