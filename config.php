@@ -83,6 +83,7 @@ $cfg->enablerecentpostsliders = true;
 $cfg->enablefacebookcomment = true;
 $cfg->enablepublishdate = true;
 $cfg->sharebuttonsoption = array();
+$cfg->thumbnailmode = 0;
 
 //Base URL
 $baseurl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -119,6 +120,7 @@ if(mysqli_num_rows($result) == 0){
 			$sharebuttonsoption = array();
 		$enablefacebookcomment = $cfg->enablefacebookcomment;
 		$enablepublishdate = $cfg->enablepublishdate;
+		$thumbnailmode = $cfg->thumbnailmode;
 	}
 }
 
