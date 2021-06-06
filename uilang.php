@@ -4,6 +4,7 @@ Developed by Habibie
 Email: habibieamrullah@gmail.com 
 WhatsApp: 6287880334339
 WebSite: https://webappdev.my.id
+Donate: https://www.paypal.com/paypalme/habibieamrullah
 */
     
     //Bahasa Indonesia
@@ -24,6 +25,9 @@ WebSite: https://webappdev.my.id
 			"Add new option title:" => "Tambah judul opsi baru",
 			"Add to Cart" => "Tambah ke Keranjang",
 			"Add" => "Tambah",
+			"Clear Cart" => "Kosongkan Keranjang",
+			"Order on WhatsApp" => "Pesan Lewat WhatsApp",
+			"Back to Shop" => "Kembali ke Toko",
 			"Add Product" => "Tambah Produk",
 			"Additional Images" => "Gambar Tambahan",
 			"Address" => "Alamat",

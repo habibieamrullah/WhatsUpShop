@@ -5,6 +5,7 @@ Developed by Habibie
 Email: habibieamrullah@gmail.com 
 WhatsApp: 6287880334339
 WebSite: https://webappdev.my.id
+Donate: https://www.paypal.com/paypalme/habibieamrullah
 */
 
 include("config.php");
@@ -311,7 +312,7 @@ if($websitetitle == ""){
 										}
 										
 										currentitem.quantity = parseFloat(currentQ)
-										$("#currenttotal").html("<?php echo $currencysymbol ?> " + tSep(currentTotal.toFixed(2)))
+										$("#currenttotal").html("<?php echo $currencysymbol ?> " + tSep(currentTotal.toFixed(<?php echo $deccount ?>)))
 									}
 									updateCurrentTotal()
 									
@@ -599,7 +600,7 @@ if($websitetitle == ""){
 									var selectedprice = poobject[0].options[x].price
 									$(".thiscurrentprice").eq(i).html(selectedprice)
 									selectedprice = parseFloat(selectedprice)
-									$(".thiscurrentpricedisplay").eq(i).html(tSep(selectedprice.toFixed(2)))
+									$(".thiscurrentpricedisplay").eq(i).html(tSep(selectedprice.toFixed(<?php echo $deccount ?>)))
 								}
 								pocontents += "<option value=" +poobject[0].options[x].price + ">" +poobject[0].options[x].title+ "</option>"
 							}
@@ -618,7 +619,7 @@ if($websitetitle == ""){
 					var selectedprice = $(".currentproductoption"+n+" option:selected").val()
 					$(".thiscurrentprice").eq(n).html($(".currentproductoption"+n+" option:selected").val())
 					selectedprice = parseFloat(selectedprice)
-					$(".thiscurrentpricedisplay").eq(n).html(tSep(selectedprice.toFixed(2)))
+					$(".thiscurrentpricedisplay").eq(n).html(tSep(selectedprice.toFixed(<?php echo $deccount ?>)))
 				}
 				
 				var cartobject = []
@@ -711,23 +712,23 @@ if($websitetitle == ""){
 						cartdata += "<div style='display: table; width: 100%;'>";
 						for(var i = 0; i < cartobject.length; i++){
 							var tmpttl = cartobject[i].price * cartobject[i].quantity
-							cartdata += "<div style='margin-bottom: 10px;'><div style='display: table-cell; vertical-align: top;'><img src='<?php echo $baseurl ?>"+cartobject[i].image+"' style='max-width: 64px; border-radius: 5px; margin-bottom: 10px;'></div><div style='display: table-cell; vertical-align: top; padding-left: 10px; padding-right: 10px; font-size: 14px;'>"+cartobject[i].title + " <?php echo $currencysymbol ?>" + tSep(parseFloat(cartobject[i].price).toFixed(2)) + "</div><div style='display: table-cell; vertical-align: top;'>*</div><div style='display: table-cell; vertical-align: top;'><input id='cartq"+i+"' onchange='modifycq("+i+")' class='productquantity' type='number' value=" + cartobject[i].quantity + " min=1 style='vertical-align: top; display: inline-block; width: 60px; font-weight: bold; padding: 10px; margin: 5px; border-radius: 0px;' onkeyup='onlyNumbers(this)'></div><div style='display: table-cell; vertical-align: top;'>=</div><div style='display: table-cell; vertical-align: top;'><div style='padding-left: 5px; padding-right: 5px;'><?php echo $currencysymbol ?>" + tSep(tmpttl.toFixed(2)) + "</div></div><div style='display: table-cell; vertical-align: top; padding-left: 5px; padding-right: 5px;' onclick='removeitem("+i+")'><i class='fa fa-trash' style='color: red;'></i></div></div>"
+							cartdata += "<div style='margin-bottom: 10px;'><div style='display: table-cell; vertical-align: middle;'><img src='<?php echo $baseurl ?>"+cartobject[i].image+"' style='max-width: 64px; border-radius: 5px; margin-bottom: 10px;'></div><div style='display: table-cell; vertical-align: middle; padding-left: 10px; padding-right: 10px; font-size: 14px;'>"+cartobject[i].title + " <?php echo $currencysymbol ?>" + tSep(parseFloat(cartobject[i].price).toFixed(<?php echo $deccount ?>)) + "</div><div style='display: table-cell; vertical-align: middle;'>*</div><div style='display: table-cell; vertical-align: top;'><input id='cartq"+i+"' onchange='modifycq("+i+")' class='productquantity' type='number' value=" + cartobject[i].quantity + " min=1 style='vertical-align: middle; display: inline-block; width: 60px; font-weight: bold; padding: 10px; margin: 5px; border-radius: 0px;' onkeyup='onlyNumbers(this)'></div><div style='display: table-cell; vertical-align: middle;'>=</div><div style='display: table-cell; vertical-align: middle;'><div style='padding-left: 5px; padding-right: 5px;'><?php echo $currencysymbol ?>" + tSep(tmpttl.toFixed(<?php echo $deccount ?>)) + "</div></div><div style='display: table-cell; vertical-align: middle; padding-left: 5px; padding-right: 5px;' onclick='removeitem("+i+")'><i class='fa fa-trash' style='color: red;'></i></div></div>"
 							grandtotal += tmpttl
 							
-							ordermessage += "- " + cartobject[i].title + " x " + cartobject[i].quantity + " = <?php echo $currencysymbol ?> " + tmpttl.toFixed(2) + "\n"
+							ordermessage += "- " + cartobject[i].title + " x " + cartobject[i].quantity + " = <?php echo $currencysymbol ?> " + tmpttl.toFixed(<?php echo $deccount ?>) + "\n"
 						}
 						cartdata += "</div>";
 					}
 					
-					ordermessage += "<?php echo uilang("Total") ?> = <?php echo $currencysymbol ?> " + grandtotal.toFixed(2) + "\n"
+					ordermessage += "<?php echo uilang("Total") ?> = <?php echo $currencysymbol ?> " + grandtotal.toFixed(<?php echo $deccount ?>) + "\n"
 					
-					cartdata += "<hr style='background-color: white;'><h1><?php echo uilang("Total") ?> = <?php echo $currencysymbol ?>" + tSep(grandtotal.toFixed(2)) + "</h1>"
+					cartdata += "<hr style='background-color: white;'><h1><?php echo uilang("Total") ?> = <?php echo $currencysymbol ?>" + tSep(grandtotal.toFixed(<?php echo $deccount ?>)) + "</h1>"
 					cartdata += "<h3><?php echo uilang("Contact Information") ?></h3><label><?php echo uilang("Name") ?></label><input id='cdname' placeholder='<?php echo uilang("Name") ?>'>"
 					cartdata += "<label><?php echo uilang("Mobile") ?></label><input id='cdmobile' type='number' placeholder='<?php echo uilang("Mobile") ?>'>"
 					cartdata += "<label><?php echo uilang("Delivery Address") ?></label><input id='cdaddress' placeholder='<?php echo uilang("Delivery Address") ?>'>"
 					cartdata += "<label><?php echo uilang("Delivery Method") ?></label><select id='cdmethod'><?php echo uilang("Delivery Method") ?><option>Take Away</option><option>Home Delivery</option><option>Dining</option></select>"
 					cartdata += "<label><?php echo uilang("Order Notes") ?></label><textarea id='cartordernotes' placeholder='<?php echo uilang("Order Notes") ?>'></textarea>"
-					cartdata += "<div style='text-align: center;'><div class='buybutton' onclick='hidecartui()'><i class='fa fa-arrow-left'></i> Back to Shop</div><div class='buybutton' onclick='clearcart()'><i class='fa fa-times'></i> Clear Cart</div><div class='buybutton' onclick='chatnow()'><i class='fa fa-whatsapp'></i> Order on WhatsApp</div></div>"
+					cartdata += "<div style='text-align: center;'><div class='buybutton' onclick='hidecartui()'><i class='fa fa-arrow-left'></i> <?php echo uilang("Back to Shop") ?></div><div class='buybutton' onclick='clearcart()'><i class='fa fa-times'></i> <?php echo uilang("Clear Cart") ?></div><div class='buybutton' onclick='chatnow()'><i class='fa fa-whatsapp'></i> <?php echo uilang("Order on WhatsApp") ?></div></div>"
 					$("#cartdata").html(cartdata)
 					$("#cartui").fadeIn()
 					savedata()

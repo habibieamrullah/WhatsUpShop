@@ -9,9 +9,9 @@ WebSite: https://webappdev.my.id
 /*
 Step 1 : Create a database, and take a note of your database name
 Step 2 : Create a database user and assign that user to that database, take a note of user name and password
-Step 3 : Adjust database connection on line 20 to 22 based on your notes earlier
+Step 3 : Adjust database connection information on dbcon.php file according to your notes earlier
 Step 4 : Adjust Admin Panel user name and password as you wish
-Step 5 : Run the web, and login to your Admin Panel by accessing admin.php page
+Step 5 : Run the web, twice for first time, and login to your Admin Panel by accessing admin.php page
 */
 
 //Admin panel credentials
