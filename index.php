@@ -11,6 +11,10 @@ include("config.php");
 include("functions.php");
 include("uilang.php");
 
+$deccount = 2;
+if($disabledecimals == 1)
+    $deccount = 0;
+
 
 if($websitetitle == ""){
 	?>
@@ -189,11 +193,11 @@ if($websitetitle == ""){
 											$oldprice = "";
 											if($row["discountprice"] != 0){
 												$saleprice = $row["discountprice"];
-												$oldprice = "<span style='margin: 0px; margin-top: 20px; text-decoration: line-through; font-size: 20px; margin-right: 10px; color: gray;'>" . $currencysymbol . number_format($row["normalprice"],2) . "</span>";
+												$oldprice = "<span style='margin: 0px; margin-top: 20px; text-decoration: line-through; font-size: 20px; margin-right: 10px; color: gray;'>" . $currencysymbol . number_format($row["normalprice"], $deccount) . "</span>";
 											}
 											?>
 											
-											<h1><?php echo $row["title"] ?> <i class="fa fa-angle-double-right"></i> <?php echo $oldprice . $currencysymbol . number_format($saleprice,2) ?></h1>
+											<h1><?php echo $row["title"] ?> <i class="fa fa-angle-double-right"></i> <?php echo $oldprice . $currencysymbol . number_format($saleprice, $deccount) ?></h1>
 											
 											<div>
 												<?php echo $row["content"] ?>
@@ -363,18 +367,18 @@ if($websitetitle == ""){
 												$imagefile = "pictures/" . $imagefile;
 											}										
 
-											$saleprice = number_format($row["normalprice"],2);
+											$saleprice = number_format($row["normalprice"], $deccount);
 											$oldprice = "";
 											if($row["discountprice"] != 0){
-												$saleprice = number_format($row["discountprice"],2);
-												$oldprice = "<span style='margin: 0px; margin-top: 20px; text-decoration: line-through; font-size: 12px; margin-right: 10px; color: gray;'>" . $currencysymbol . number_format($row["normalprice"],2) . "</span>";
+												$saleprice = number_format($row["discountprice"], $deccount);
+												$oldprice = "<span style='margin: 0px; margin-top: 20px; text-decoration: line-through; font-size: 12px; margin-right: 10px; color: gray;'>" . $currencysymbol . number_format($row["normalprice"], $deccount) . "</span>";
 											}
 											
 											?>
 											<div class="lilimage" style="background: url(<?php echo $baseurl . $imagefile ?>) no-repeat center center; background-size: cover; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover;"></div>
 											<div class="lildescr">
 												<div class="shorttext" style="font-size: 18px; font-weight: bold;">
-													<?php echo $row["title"] ?><br><i class="fa fa-angle-double-right"></i> <?php echo $oldprice. $currencysymbol . number_format($saleprice,2) ?>
+													<?php echo $row["title"] ?><br><i class="fa fa-angle-double-right"></i> <?php echo $oldprice. $currencysymbol . number_format($saleprice, $deccount) ?>
 												</div>
 												<div style="padding-left: 14px;">
 													<p><?php echo shorten_text(strip_tags($row["content"]), 75, ' ...', false) ?></p>
@@ -510,11 +514,11 @@ if($websitetitle == ""){
 										$oldprice = "";
 										if($row["discountprice"] != 0){
 											$saleprice = $row["discountprice"];
-											$oldprice = "<span style='margin: 0px; margin-top: 20px; text-decoration: line-through; font-size: 12px; margin-right: 10px; color: gray;'>" . $currencysymbol . number_format($row["normalprice"],2) . "</span>";
+											$oldprice = "<span style='margin: 0px; margin-top: 20px; text-decoration: line-through; font-size: 12px; margin-right: 10px; color: gray;'>" . $currencysymbol . number_format($row["normalprice"], $deccount) . "</span>";
 										}
 										?>
 										
-										<h2 style="margin-top: 20px;" class="producttitle"><?php echo shorten_text($row["title"], 25, ' ...', false) ?></h2><div class="realproducttitle" style="display: none"><?php echo $row["title"] ?></div><div class="productoptions" style="display: none"><?php echo $row["options"] ?></div><div style="padding-bottom: 20px; font-size: 25px; font-weight: bold; color: <?php echo $maincolor ?>"><?php echo $oldprice . $currencysymbol . "<span class='thiscurrentpricedisplay'>" . number_format($saleprice, 2) ?></span><span style="display: none;" class="thiscurrentprice"><?php echo $saleprice ?></span> <span style="font-size: 12px;">x</span> <input class="productquantity" type="number" value=1 min=1 style="vertical-align: middle; display: inline-block; width: 60px; font-weight: bold; padding: 10px; margin: 5px; border-radius: 0px;" onkeyup="onlyNumbers(this)"></div>
+										<h2 style="margin-top: 20px;" class="producttitle"><?php echo shorten_text($row["title"], 25, ' ...', false) ?></h2><div class="realproducttitle" style="display: none"><?php echo $row["title"] ?></div><div class="productoptions" style="display: none"><?php echo $row["options"] ?></div><div style="padding-bottom: 20px; font-size: 25px; font-weight: bold; color: <?php echo $maincolor ?>"><?php echo $oldprice . $currencysymbol . "<span class='thiscurrentpricedisplay'>" . number_format($saleprice, $deccount) ?></span><span style="display: none;" class="thiscurrentprice"><?php echo $saleprice ?></span> <span style="font-size: 12px;">x</span> <input class="productquantity" type="number" value=1 min=1 style="vertical-align: middle; display: inline-block; width: 60px; font-weight: bold; padding: 10px; margin: 5px; border-radius: 0px;" onkeyup="onlyNumbers(this)"></div>
 										<div class="morebutton" onclick="addtocart(<?php echo $productindex ?>)"><i class="fa fa-shopping-cart"></i> <?php echo uilang("Add to Cart") ?></div>
 										<div style="padding: 20px;"><a onclick="showmore(<?php echo $productindex ?>)" class="textlink whatsmorebutton" style="cursor: pointer; text-decoration: none;"><i class="fa fa-chevron-down"></i> <?php echo uilang("More") ?></a><div class="whatsmorecontent" style="display: none; padding: 5px; font-size: 12px;"><?php echo shorten_text(strip_tags($row["content"]), 50, " ...") ?><br><a class="textlink" href="<?php echo $baseurl ?>?post=<?php echo $row["postid"] ?>"><?php echo uilang("Continue") ?></a></div></div>
 									</div>

@@ -381,6 +381,7 @@ include("uilang.php");
 									$cfg->enablerecentpostsliders = mysqli_real_escape_string($connection, $_POST["enablerecentpostsliders"]);
 									$cfg->enablefacebookcomment = mysqli_real_escape_string($connection, $_POST["enablefacebookcomment"]);
 									$cfg->enablepublishdate = mysqli_real_escape_string($connection, $_POST["enablepublishdate"]);
+									$cfg->disabledecimals = mysqli_real_escape_string($connection, $_POST["disabledecimals"]);
 									if(isset($_POST["sharebuttonsoption"]))
 										$cfg->sharebuttonsoption = $_POST["sharebuttonsoption"];
 									$JSONcfg = addslashes(json_encode($cfg));
@@ -490,6 +491,13 @@ include("uilang.php");
 									
 									<label><i class="fa fa-money"></i> <?php echo uilang("Currency Symbol") ?></label>
 									<input placeholder="<?php echo uilang("Currency Symbol") ?>" name="currencysymbol" value="<?php echo $currencysymbol ?>">
+									
+									<label><i class="fa fa-money"></i> <?php echo uilang("Disable Decimals") ?></label>
+									<select name="disabledecimals">
+										<option value=0 <?php if($cfg->disabledecimals == "0"){ echo "selected"; } ?>><?php echo uilang("No") ?></option>
+										<option value=1 <?php if($cfg->disabledecimals == "1"){ echo "selected"; } ?>><?php echo uilang("Yes") ?></option>
+									</select>
+									<br>
 												
 									<label><i class="fa fa-whatsapp"></i> <?php echo uilang("Admin WhatsApp Phone Number") ?></label>
 									<input placeholder="<?php echo uilang("Admin WhatsApp Phone Number") ?>" name="adminwhatsapp" value="<?php echo $cfg->adminwhatsapp ?>">

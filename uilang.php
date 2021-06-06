@@ -37,6 +37,7 @@ WebSite: https://webappdev.my.id
 			"Category updated" => "Kategori telah diperbarui",
 			"Category" => "Kategori",
 			"Close" => "Tutup",
+			"Disable Decimals" => "Sembunyikan Desimal",
 			"Congratulation!" => "Selamat!",
 			"Contact Information" => "Informasi Pembeli",
 			"Content" => "Konten",

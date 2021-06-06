@@ -71,11 +71,11 @@ $websitetitle = "";
 
 //Default website config values
 $cfg = new \stdClass();
-$cfg->websitetitle = "WhatsUpShop";
+$cfg->websitetitle = "Toko Online WA";
 $cfg->maincolor = "#f28433";
 $cfg->secondcolor = "#ffb98a";
-$cfg->about = "<p>Just another cool online shop.</p>";
-$cfg->language = "en";
+$cfg->about = "<p>Toko online simpel sederhana berbasis WhatsApp.</p>";
+$cfg->language = "id";
 $cfg->logo = "";
 $cfg->adminwhatsapp = "6287880334339";
 $cfg->currencysymbol = "$";
@@ -84,6 +84,7 @@ $cfg->enablefacebookcomment = true;
 $cfg->enablepublishdate = true;
 $cfg->sharebuttonsoption = array();
 $cfg->thumbnailmode = 0;
+$cfg->disabledecimals = 0;
 
 //Base URL
 $baseurl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -121,6 +122,7 @@ if(mysqli_num_rows($result) == 0){
 		$enablefacebookcomment = $cfg->enablefacebookcomment;
 		$enablepublishdate = $cfg->enablepublishdate;
 		$thumbnailmode = $cfg->thumbnailmode;
+		$disabledecimals = $cfg->disabledecimals;
 	}
 }
 
