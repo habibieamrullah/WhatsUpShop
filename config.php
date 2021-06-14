@@ -100,7 +100,7 @@ $result = mysqli_query($connection, $sql);
 //Check if its blank
 if(mysqli_num_rows($result) == 0){
 	//Then generate default values
-	mysqli_query($connection, $sql = "INSERT INTO $tableconfig (config, value) VALUES ('cfg', '$JSONcfg');");
+	mysqli_query($connection, $sql = "INSERT INTO $tableconfig (config, value) VALUES ('cfg', '$JSONcfg')");
 }else{
 	//Then load the website configurations
 	while($row = mysqli_fetch_assoc($result)){

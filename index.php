@@ -13,7 +13,7 @@ include("functions.php");
 include("uilang.php");
 
 $deccount = 2;
-if($disabledecimals == 1)
+if($cfg->disabledecimals == 1)
     $deccount = 0;
 
 
