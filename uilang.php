@@ -138,6 +138,12 @@ Donate: https://www.paypal.com/paypalme/habibieamrullah
 			"Order Notes" => "Catatan",
 			"to try again" => "untuk mencoba lagi",
 			"to view it" => "untuk melihatnya",
+			"Dashboard" => "Dasbor",
+			"Quick Actions" => "Aksi Cepat",
+			"View Shop" => "Lihat Toko",
+			"Login error!" => "Gagal masuk!",
+			"Logo" => "Logo",
+			"Order on WhatsApp..." => "Memesan lewat WhatsApp...",
 		);
 		
 		return proceedTranslation($definitions, $rawword);

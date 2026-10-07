@@ -320,30 +320,30 @@ if($websitetitle == ""){
 										currentitem.notes = $("#ordernotes").val()
 										
 										if(cartobject.length == 0){
-											console.log("Added first product")
 											cartobject.push(currentitem)
 											updatecartcount()
 											savedata()
-											location.reload()
+											showToast("<?php echo uilang("Add to Cart") ?>", "success")
+											setTimeout(function(){ location.reload() }, 600)
 											return
 										}else{
 											for(var i = 0; i < cartobject.length; i++){
 												if(cartobject[i].title == currentitem.title && cartobject[i].price == currentitem.price){
-													console.log("Added quantity only")
 													cartobject[i].quantity += currentitem.quantity
 													updatecartcount()
 													savedata()
-													location.reload()
+													showToast("<?php echo uilang("Add to Cart") ?>", "success")
+													setTimeout(function(){ location.reload() }, 600)
 													return
 												}
 											}
-											console.log("Pushing new product to cartobject")
 											cartobject.push(currentitem)
 											updatecartcount()
 											savedata()
-											location.reload()
+											showToast("<?php echo uilang("Add to Cart") ?>", "success")
+											setTimeout(function(){ location.reload() }, 600)
 											return
-										}	
+										}
 
 									}
 									
@@ -476,6 +476,14 @@ if($websitetitle == ""){
 					$sql = "SELECT * FROM $tableposts ORDER BY id DESC";
 					$result = mysqli_query($connection, $sql);
 					if($result){
+						if(mysqli_num_rows($result) == 0){
+							?>
+							<div class="empty-state" style="width: 100%;">
+								<i class="fa fa-shopping-basket"></i>
+								<p><?php echo uilang("There is no post published") ?>.</p>
+							</div>
+							<?php
+						}
 						if(mysqli_num_rows($result) > 0){
 							$productindex = 0;
 							while($row = mysqli_fetch_assoc($result)){
@@ -662,6 +670,7 @@ if($websitetitle == ""){
 						})
 						updatecartcount()
 						savedata()
+						showToast("<?php echo uilang("Add to Cart") ?>", "success")
 					}
 					
 					if(cartobject.length == 0){
@@ -672,12 +681,13 @@ if($websitetitle == ""){
 								cartobject[i].quantity += prodquantity
 								updatecartcount()
 								savedata()
+								showToast("<?php echo uilang("Add to Cart") ?>", "success")
 								return
 							}
 						}
 						pushit()
 						return
-					}				
+					}
 					
 				}
 				
@@ -687,6 +697,12 @@ if($websitetitle == ""){
 						$("#cartbutton").fadeIn()
 					})
 					$("#cartcount").html(cartobject.length)
+					
+					// Pulse animation on the cart button
+					var $circle = $(".cartbuttoncircle")
+					$circle.removeClass("cart-pulse")
+					void $circle[0].offsetWidth
+					$circle.addClass("cart-pulse")
 					
 				}
 				
@@ -709,21 +725,26 @@ if($websitetitle == ""){
 					var cartdata = ""
 					var grandtotal = 0;
 					if(cartobject.length > 0){
-						cartdata += "<div style='display: table; width: 100%;'>";
 						for(var i = 0; i < cartobject.length; i++){
 							var tmpttl = cartobject[i].price * cartobject[i].quantity
-							cartdata += "<div style='margin-bottom: 10px;'><div style='display: table-cell; vertical-align: middle;'><img src='<?php echo $baseurl ?>"+cartobject[i].image+"' style='max-width: 64px; border-radius: 5px; margin-bottom: 10px;'></div><div style='display: table-cell; vertical-align: middle; padding-left: 10px; padding-right: 10px; font-size: 14px;'>"+cartobject[i].title + " <?php echo $currencysymbol ?>" + tSep(parseFloat(cartobject[i].price).toFixed(<?php echo $deccount ?>)) + "</div><div style='display: table-cell; vertical-align: middle;'>*</div><div style='display: table-cell; vertical-align: top;'><input id='cartq"+i+"' onchange='modifycq("+i+")' class='productquantity' type='number' value=" + cartobject[i].quantity + " min=1 style='vertical-align: middle; display: inline-block; width: 60px; font-weight: bold; padding: 10px; margin: 5px; border-radius: 0px;' onkeyup='onlyNumbers(this)'></div><div style='display: table-cell; vertical-align: middle;'>=</div><div style='display: table-cell; vertical-align: middle;'><div style='padding-left: 5px; padding-right: 5px;'><?php echo $currencysymbol ?>" + tSep(tmpttl.toFixed(<?php echo $deccount ?>)) + "</div></div><div style='display: table-cell; vertical-align: middle; padding-left: 5px; padding-right: 5px;' onclick='removeitem("+i+")'><i class='fa fa-trash' style='color: red;'></i></div></div>"
+							cartdata += "<div class='cart-line'>"
+							cartdata += "<img src='<?php echo $baseurl ?>"+cartobject[i].image+"'>"
+							cartdata += "<div class='cart-line-info'><div style='font-weight: bold;'>"+cartobject[i].title+"</div><div style='opacity: .8;'><?php echo $currencysymbol ?>" + tSep(parseFloat(cartobject[i].price).toFixed(<?php echo $deccount ?>)) + " &times; <input id='cartq"+i+"' onchange='modifycq("+i+")' class='productquantity' type='number' value=" + cartobject[i].quantity + " min=1 style='width: 60px; padding: 6px; margin: 0; display: inline-block;' onkeyup='onlyNumbers(this)'></div></div>"
+							cartdata += "<div class='cart-line-total'><?php echo $currencysymbol ?>" + tSep(tmpttl.toFixed(<?php echo $deccount ?>)) + "</div>"
+							cartdata += "<div class='cart-remove' onclick='removeitem("+i+")' title='<?php echo uilang("Delete") ?>'><i class='fa fa-trash'></i></div>"
+							cartdata += "</div>"
 							grandtotal += tmpttl
 							
 							ordermessage += "- " + cartobject[i].title + " x " + cartobject[i].quantity + " = <?php echo $currencysymbol ?> " + tmpttl.toFixed(<?php echo $deccount ?>) + "\n"
 						}
-						cartdata += "</div>";
+					}else{
+						cartdata += "<div class='empty-state'><i class='fa fa-shopping-cart'></i><p><?php echo uilang("You did not add any product.") ?></p></div>"
 					}
 					
 					ordermessage += "<?php echo uilang("Total") ?> = <?php echo $currencysymbol ?> " + grandtotal.toFixed(<?php echo $deccount ?>) + "\n"
 					
-					cartdata += "<hr style='background-color: white;'><h1><?php echo uilang("Total") ?> = <?php echo $currencysymbol ?>" + tSep(grandtotal.toFixed(<?php echo $deccount ?>)) + "</h1>"
-					cartdata += "<h3><?php echo uilang("Contact Information") ?></h3><label><?php echo uilang("Name") ?></label><input id='cdname' placeholder='<?php echo uilang("Name") ?>'>"
+					cartdata += "<div class='cart-summary'><h1 style='margin: 0;'><?php echo uilang("Total") ?> = <?php echo $currencysymbol ?>" + tSep(grandtotal.toFixed(<?php echo $deccount ?>)) + "</h1></div>"
+					cartdata += "<h3 style='margin-top: 24px;'><?php echo uilang("Contact Information") ?></h3><label><?php echo uilang("Name") ?></label><input id='cdname' placeholder='<?php echo uilang("Name") ?>'>"
 					cartdata += "<label><?php echo uilang("Mobile") ?></label><input id='cdmobile' type='number' placeholder='<?php echo uilang("Mobile") ?>'>"
 					cartdata += "<label><?php echo uilang("Delivery Address") ?></label><input id='cdaddress' placeholder='<?php echo uilang("Delivery Address") ?>'>"
 					cartdata += "<label><?php echo uilang("Delivery Method") ?></label><select id='cdmethod'><?php echo uilang("Delivery Method") ?><option>Take Away</option><option>Home Delivery</option><option>Dining</option></select>"
@@ -742,9 +763,12 @@ if($websitetitle == ""){
 				}
 				
 				function clearcart(){
+					if(cartobject.length == 0) return
+					if(!confirm("<?php echo uilang("Clear Cart") ?>?")) return
 					cartobject = []
 					showcartui()
 					updatecartcount()
+					showToast("<?php echo uilang("Clear Cart") ?>", "info")
 				}
 				
 				function modifycq(n){
@@ -759,6 +783,11 @@ if($websitetitle == ""){
 					var cdaddress = $("#cdaddress").val()
 					var cdmethod = $("#cdmethod").val()
 					
+					if(cartobject.length == 0){
+						showToast("<?php echo uilang("You did not add any product.") ?>", "error")
+						return
+					}
+					
 					if(cdname != "" && cdmobile != "" && cdaddress != "" && cdmethod != ""){
 					
 						ordermessage += "<?php echo uilang("Name") ?>: " + cdname + "\n<?php echo uilang("Mobile") ?>: " + cdmobile + "\n<?php echo uilang("Address") ?>: " + cdaddress + "\n<?php echo uilang("Delivery Method") ?>: " + cdmethod + "\n" + "ORDER NOTES: " + $("#cartordernotes").val()
@@ -767,25 +796,40 @@ if($websitetitle == ""){
 						}, function(data){
 							ordermessage = ordermessage.replaceAll("&", "and");
 							var omuri = encodeURI(ordermessage);
-							console.log(ordermessage);
-							//location.href = "https://wa.me/<?php echo $adminwhatsapp ?>?text=" + omuri
+							showToast("<?php echo uilang("Order on WhatsApp") ?>...", "success")
 							window.open("https://wa.me/<?php echo $adminwhatsapp ?>?text=" + omuri, '_blank');
 						})
 					
 					}else{
-						alert("<?php echo uilang("Please fill all details.") ?>")
+						showToast("<?php echo uilang("Please fill all details.") ?>", "error")
 					}
 				}
 				
 				function quicksearch(){
 					var keyword = $("#quicksearch").val();
 					keyword = keyword.toLowerCase();
+					var visibleCount = 0;
 					if(keyword.length > 0){
 						for(var i = 0; i < $(".filmblock").length; i++){
-							if($(".filmblock")[i].innerHTML.toLowerCase().indexOf(keyword) > -1) $(".filmblock")[i].style.display = "inline-block";
-							else $(".filmblock")[i].style.display = "none";
+							if($(".filmblock")[i].innerHTML.toLowerCase().indexOf(keyword) > -1){
+								$(".filmblock")[i].style.display = "inline-block";
+								visibleCount++;
+							}else{
+								$(".filmblock")[i].style.display = "none";
+							}
 						}
-					} else $(".filmblock").css({ display : "inline-block" });
+						// Show a "no results" message when nothing matches
+						if(visibleCount == 0){
+							if($("#noresults").length == 0){
+								$(".gridcontainerunscrollable").append("<div id='noresults' class='empty-state' style='width: 100%;'><i class='fa fa-search'></i><p><?php echo uilang("Nothing found") ?></p></div>")
+							}
+						}else{
+							$("#noresults").remove()
+						}
+					}else{
+						$(".filmblock").css({ display : "inline-block" });
+						$("#noresults").remove()
+					}
 					
 				}
 				

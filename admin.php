@@ -95,15 +95,18 @@ if(!$isLoggedIn && isset($_POST["username"]) && isset($_POST["password"])) {
         <div class="loginform">
             <div style="text-align: center; padding: 20px;">
                 <?php $currentlogo = $logo ? "pictures/" . $logo : "images/logo.png"; ?>
-                <img src="<?php echo $currentlogo ?>" width="128" alt="Logo"><br>
-                <p><?php echo htmlspecialchars($websitetitle) ?> - Admin Panel</p>
+                <img src="<?php echo $currentlogo ?>" width="128" alt="Logo" style="max-width: 128px;"><br>
+                <p style="font-weight: bold; font-size: 18px;"><?php echo htmlspecialchars($websitetitle) ?></p>
+                <p style="color: #888; font-size: 13px;">Admin Panel</p>
             </div>
-            <h1><?php echo uilang("Login") ?></h1>
+            <h1 style="text-align: center;"><i class="fa fa-lock"></i> <?php echo uilang("Login") ?></h1>
             <?php if(isset($loginError)): ?>
-                <div class="alert">Login error!</div>
+                <div class="alert" style="background-color: #c62828;"><?php echo uilang("Login error!") ?></div>
             <?php endif; ?>
             <form method="post">
-                <input type="text" name="username" placeholder="Username" required>
+                <label><i class="fa fa-user"></i> Username</label>
+                <input type="text" name="username" placeholder="Username" required autofocus>
+                <label><i class="fa fa-key"></i> Password</label>
                 <input type="password" name="password" placeholder="Password" required>
                 <input class="submitbutton" type="submit" value="<?php echo uilang("Login") ?>">
             </form>
@@ -122,21 +125,30 @@ if(!$isLoggedIn && isset($_POST["username"]) && isset($_POST["password"])) {
                             <a target="_blank" href="<?php echo $baseurl ?>"><img src="<?php echo $currentlogo ?>" style="display: border-box; width: 100%;" alt="Logo"></a>
                         </div>
                         
-                        <?php 
+                        <?php
+                        // Determine the currently active menu key
+                        $activeKey = 'home';
+                        if (isset($_GET['newpost'])) $activeKey = 'newpost';
+                        elseif (isset($_GET['pictures'])) $activeKey = 'pictures';
+                        elseif (isset($_GET['categories'])) $activeKey = 'categories';
+                        elseif (isset($_GET['orders'])) $activeKey = 'orders';
+                        elseif (isset($_GET['settings'])) $activeKey = 'settings';
+                        elseif (isset($_GET['editpost'])) $activeKey = 'home';
+
                         $menuItems = [
-                            ['icon' => 'fa-home', 'link' => 'admin.php', 'text' => 'Home'],
-                            ['icon' => 'fa-plus', 'link' => 'admin.php?newpost', 'text' => 'Add Product'],
-                            ['icon' => 'fa-image', 'link' => 'admin.php?pictures', 'text' => 'Pictures'],
-                            ['icon' => 'fa-tag', 'link' => 'admin.php?categories', 'text' => 'Categories'],
-                            ['icon' => 'fa-file-text', 'link' => 'admin.php?orders', 'text' => 'Orders'],
-                            ['icon' => 'fa-cogs', 'link' => 'admin.php?settings', 'text' => 'Settings'],
-                            ['icon' => 'fa-sign-out', 'link' => 'admin.php?logout', 'text' => 'Logout']
+                            ['key' => 'home', 'icon' => 'fa-home', 'link' => 'admin.php', 'text' => 'Home'],
+                            ['key' => 'newpost', 'icon' => 'fa-plus', 'link' => 'admin.php?newpost', 'text' => 'Add Product'],
+                            ['key' => 'pictures', 'icon' => 'fa-image', 'link' => 'admin.php?pictures', 'text' => 'Pictures'],
+                            ['key' => 'categories', 'icon' => 'fa-tag', 'link' => 'admin.php?categories', 'text' => 'Categories'],
+                            ['key' => 'orders', 'icon' => 'fa-file-text', 'link' => 'admin.php?orders', 'text' => 'Orders'],
+                            ['key' => 'settings', 'icon' => 'fa-cogs', 'link' => 'admin.php?settings', 'text' => 'Settings'],
+                            ['key' => 'logout', 'icon' => 'fa-sign-out', 'link' => 'admin.php?logout', 'text' => 'Logout']
                         ];
                         
                         foreach ($menuItems as $item): ?>
                             <a href="<?php echo $baseurl . $item['link'] ?>">
-                                <div class="adminleftbaritem">
-                                    <i class="fa <?php echo $item['icon'] ?>" style="width: 30px;"></i> 
+                                <div class="adminleftbaritem<?php echo ($activeKey === $item['key']) ? ' active' : '' ?>">
+                                    <i class="fa <?php echo $item['icon'] ?>" style="width: 30px;"></i>
                                     <?php echo uilang($item['text']) ?>
                                 </div>
                             </a>
@@ -347,13 +359,26 @@ if(!$isLoggedIn && isset($_POST["username"]) && isset($_POST["password"])) {
             
             // Global Functions
             function toggleadminmenu() {
-                $(".adminmenubar").toggle()
+                var $menu = $(".adminmenubar")
+                if($menu.is(":visible")){
+                    $menu.hide()
+                    $("#adminbackdrop").remove()
+                }else{
+                    $menu.show()
+                    if($("#adminbackdrop").length == 0){
+                        $("body").append("<div id='adminbackdrop'></div>")
+                        $("#adminbackdrop").on("click", function(){
+                            $(".adminmenubar").hide()
+                            $(this).remove()
+                        })
+                    }
+                }
             }
             
-            // Auto-hide alerts after 2 seconds
+            // Auto-hide alerts after 3 seconds
             setTimeout(function() {
                 $(".alert").slideUp()
-            }, 2000)
+            }, 3000)
             
             // Initialize options if they exist
             $(document).ready(function() {
